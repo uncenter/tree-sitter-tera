@@ -193,8 +193,13 @@
                 "value": "."
               },
               {
-                "type": "SYMBOL",
-                "name": "identifier"
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                },
+                "named": true,
+                "value": "property_identifier"
               }
             ]
           }
@@ -591,31 +596,6 @@
                 "name": "operator",
                 "content": {
                   "type": "STRING",
-                  "value": "not"
-                }
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_expr"
-              }
-            ]
-          }
-        },
-        {
-          "type": "PREC_LEFT",
-          "value": 0,
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "_expr"
-              },
-              {
-                "type": "FIELD",
-                "name": "operator",
-                "content": {
-                  "type": "STRING",
                   "value": "is"
                 }
               },
@@ -640,6 +620,19 @@
               {
                 "type": "STRING",
                 "value": "-"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_expr"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "not"
               },
               {
                 "type": "SYMBOL",

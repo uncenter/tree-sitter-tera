@@ -195,10 +195,6 @@
             "named": false
           },
           {
-            "type": "not",
-            "named": false
-          },
-          {
             "type": "or",
             "named": false
           }
@@ -409,6 +405,10 @@
       "types": [
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "property_identifier",
           "named": true
         }
       ]
@@ -774,6 +774,10 @@
   {
     "type": "or",
     "named": false
+  },
+  {
+    "type": "property_identifier",
+    "named": true
   },
   {
     "type": "set",
