@@ -6,7 +6,9 @@ module.exports = grammar({
 
   rules: {
     source_file: $ => repeat($._template),
+    content: $ => /([^{]|[{][^{%#])+/,
 
+    /* Primitives */
     bool: $ => token(/[Tt]rue|[Ff]alse/),
     number: $ => token(/[\+-]?[0-9]+(\.[0-9]+)?/),
     string: $ => choice(
@@ -15,13 +17,13 @@ module.exports = grammar({
         seq('`', repeat(/[`"]/), '`')
       ),
     literal: $ => choice($.bool, $.number, $.string),
-    array: $ => seq("[", repeat(seq($._expr, optional(","))), "]"),
-    value: $ => choice($.literal, $.array),
+    array: $ => seq("[", repeat(seq($._value, optional(","))), "]"),
     identifier: $ => /\w+/,
     
+    /* Expressions */
     member_expression: $ => seq($.identifier, repeat1(seq(".", alias($.identifier, $.property_identifier)))),
     binary_expression: $ => {
-      const exp = (op) => seq(field('left', $._expr), field('operator', op), field('right', $._expr));
+      const exp = (op) => seq(field('left', $._value), field('operator', op), field('right', $._value));
       return choice(
         ...['*', '/', '%', "|"].map(op => prec.left(2, exp(op))),
         ...['+', '-', '~'].map(op => prec.left(1, exp(op))),
@@ -29,15 +31,18 @@ module.exports = grammar({
       );
     },
     unary_expression: $ => prec(3, choice(
-      seq('-', $._expr),
-      seq("not", $._expr)
+      seq('-', $._value),
+      seq("not", $._value)
     )),
-    assignment_expression: $ => seq(choice($.identifier, $.member_expression), "=", $._expr),
+    assignment_expression: $ => seq(choice($.identifier, $.member_expression), "=", $._value),
     call_expression: $ => seq(
-      choice(field('name', $.identifier), seq(field('scope', $.identifier), "::", field('name', $.identifier))),
-      "(", field('arguments', repeat(seq($.identifier, "=", $.value, optional(",")))), ")"
+      optional(seq(field('scope', $.identifier), "::")),
+      field('name', $.identifier),
+      "(", field('arguments', repeat(seq($.identifier, "=", $._value, optional(",")))), ")"
     ),
-    _expr: $ => seq(choice(
+
+    // Something that can resolve to a value.
+    _value: $ => seq(choice(
       $.identifier,
       $.member_expression,
 
@@ -48,26 +53,61 @@ module.exports = grammar({
       $.call_expression
     )),
 
+    /* Tags */
+    _template: $ => choice(
+      $._statement_tag,
+      $.expression_tag,
+      $.comment_tag,
+      $.content
+    ),
+
+    // Comment
+    comment_tag: $ => seq(
+      "{#", optional("-"), /[^#]+/, optional("-"), "#}"
+    ),
+  
+    // Expression
     expression_tag: $ => seq(
-      "{{", optional("-"), $._expr, optional("-"), "}}"
+      "{{", optional("-"), $._value, optional("-"), "}}"
+    ),
+
+    // Statements
+    _statement_tag: $ => choice(
+      $.if_statement,
+      $.for_statement,
+      $.set_statement,
+      $.include_statement,
+      $.import_statement,
+      $.extends_statement,
+      $.macro_statement,
+      $.filter_statement,
+      $.block_statement
     ),
 
     if_statement: $ => seq(
-      statement(seq("if", $._expr)),
-      choice(repeat($._template), statement("else"), statement(seq("elif", $._expr))),
+      statement(field('condition', seq("if", $._value))),
+      field('consequence', repeat($._template)),
+      optional(field('alternative', repeat($.elif_clause))),
+      optional(field('alternative', $.else_clause)),
       statement("endif")
     ),
+    elif_clause: $ => prec.right(1,seq(
+      statement(field('condition', seq("elif", $._value))),
+      field('consequence', repeat($._template)),
+    )),
+    else_clause: $ => prec.right(1, seq(
+      statement("else"),
+      field('consequence', repeat($._template)),
+    )),
     for_statement: $ => seq(
       statement(seq(
         "for",
-        $.identifier, optional(seq(",", $.identifier)),
+        field('left', seq($.identifier, optional(seq(",", $.identifier)))),
         "in",
-        $._expr,
+        field('right', $._value),
       )),
-      choice(repeat($._template), statement("break"), statement("continue")),
-      statement(
-        "endfor"
-      )
+      field('body', choice(repeat($._template), alias(statement("break"), $.for_break_statement), alias(statement("continue"), $.for_continue_statement))),
+      statement("endfor")
     ),
     set_statement: $ => statement(seq(
       choice("set", "set_global"), $.assignment_expression
@@ -104,28 +144,6 @@ module.exports = grammar({
       )),
       repeat($._template),
       statement(seq("endblock", $.identifier))
-    ),
-    _statement_tag: $ => choice(
-      $.if_statement,
-      $.for_statement,
-      $.set_statement,
-      $.include_statement,
-      $.import_statement,
-      $.extends_statement,
-      $.macro_statement,
-      $.filter_statement,
-      $.block_statement
-    ),
-    comment_tag: $ => seq(
-      "{#", optional("-"), /[^#]+/, optional("-"), "#}"
-    ),
-
-    content: $ => /([^{]|[{][^{%#])+/,
-    _template: $ => choice(
-      $._statement_tag,
-      $.expression_tag,
-      $.comment_tag,
-      $.content
     ),
   }
 });
