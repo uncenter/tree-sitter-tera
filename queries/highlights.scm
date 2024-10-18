@@ -40,6 +40,7 @@
   ">"
   "<="
   ">="
+  "::"
 ] @operator
 
 [
@@ -51,7 +52,7 @@
   "%}"
   "}}"
   "{{"
-]  @punctuation.bracket
+] @punctuation.bracket
 
 ; Tags
 ;-----------
@@ -62,38 +63,56 @@
 ;-----------
 
 [
+  "if"
+  "elif"
+  "else"
+  "endif"
+] @keyword.control.conditional
+
+[
+  "for"
+  "endfor"
+] @keyword.control.repeat
+
+[
+  "include"
+  "import"
+  "extends"
+] @keyword.control.import
+
+[
   "in"
   "and"
   "or"
   "not"
   "is"
+] @keyword.operator
 
-  "if"
-  "elif"
-  "else"
-  "endif"
-  "endfor"
-  "endfilter"
+[
   "break"
   "continue"
-  "for"
-  "in"
   "set"
   "set_global"
-  "include"
-  "import"
-  "extends"
   "filter"
+  "endfilter"
   "block"
   "endblock"
   "macro"
   "endmacro"
 ] @keyword
 
-((identifier) @variable.builtin
- (#match? @variable.builtin "^(loop)$")
- (#is-not? local))
+(macro_statement
+  name: (identifier) @function)
 
-; ((identifier) @function.builtin
-;  (#eq? @function.builtin "")
-;  (#is-not? local))
+(call_expression
+  name: (identifier) @function)
+
+(call_expression
+  scope: (identifier) @namespace)
+
+(import_statement
+  scope: (identifier) @namespace)
+
+(binary_expression
+  operator: "|"
+  right: (identifier) @function.method)
