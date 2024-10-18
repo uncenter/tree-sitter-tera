@@ -26,14 +26,15 @@ module.exports = grammar({
     value: $ => choice($.literal, $.array),
     identifier: $ => /\w+/,
     
-    member_expression: $ => seq($.identifier, repeat1(seq(".", $.identifier))),
+    member_expression: $ => seq($.identifier, repeat1(seq(".", alias($.identifier, $.property_identifier)))),
     binary_expression: $ => choice(
       ...['*', '/', '%', "|"].map(op => prec.left(2, seq($._expr, op, $._expr))),
       ...['+', '-', '~'].map(op => prec.left(1, seq($._expr, op, $._expr))),
-      ...["==", "!=", "<", ">", "<=", ">=", 'in', 'and', 'or', 'not', 'is'].map(op => prec.left(seq($._expr, field('operator', op), $._expr)))
+      ...["==", "!=", "<", ">", "<=", ">=", 'in', 'and', 'or', 'is'].map(op => prec.left(seq($._expr, field('operator', op), $._expr)))
     ),
     unary_expression: $ => prec(3, choice(
-      seq('-', $._expr)
+      seq('-', $._expr),
+      seq("not", $._expr)
     )),
     assignment_expression: $ => seq(choice($.identifier, $.member_expression), "=", $._expr),
     call_expression: $ => seq(
