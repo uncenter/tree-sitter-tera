@@ -120,7 +120,7 @@ module.exports = grammar({
      "include", choice($.string, $.array), optional("ignore missing")
     )),
     import_statement: $ => statement(seq(
-      "import", $.string, "as", $.identifier
+      "import", $.string, "as", field('scope', $.identifier)
     )),
     extends_statement: $ => statement(seq(
       "extends", $.string
