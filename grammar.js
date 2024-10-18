@@ -15,24 +15,27 @@ module.exports = grammar({
         seq('`', repeat(/[`"]/), '`')
       ),
     literal: $ => choice($.bool, $.number, $.string),
-    array: $ => seq("[", repeat(seq($.literal, optional(","))), "]"),
+    array: $ => seq("[", repeat(seq($._expr, optional(","))), "]"),
     value: $ => choice($.literal, $.array),
     identifier: $ => /\w+/,
     
     member_expression: $ => seq($.identifier, repeat1(seq(".", alias($.identifier, $.property_identifier)))),
-    binary_expression: $ => choice(
-      ...['*', '/', '%', "|"].map(op => prec.left(2, seq($._expr, op, $._expr))),
-      ...['+', '-', '~'].map(op => prec.left(1, seq($._expr, op, $._expr))),
-      ...["==", "!=", "<", ">", "<=", ">=", 'in', 'and', 'or', 'is'].map(op => prec.left(seq($._expr, field('operator', op), $._expr)))
-    ),
+    binary_expression: $ => {
+      const exp = (op) => seq(field('left', $._expr), field('operator', op), field('right', $._expr));
+      return choice(
+        ...['*', '/', '%', "|"].map(op => prec.left(2, exp(op))),
+        ...['+', '-', '~'].map(op => prec.left(1, exp(op))),
+        ...["==", "!=", "<", ">", "<=", ">=", 'in', 'and', 'or', 'is'].map(op => prec.left(exp(op)))
+      );
+    },
     unary_expression: $ => prec(3, choice(
       seq('-', $._expr),
       seq("not", $._expr)
     )),
     assignment_expression: $ => seq(choice($.identifier, $.member_expression), "=", $._expr),
     call_expression: $ => seq(
-      choice($.identifier, seq($.identifier, "::", $.identifier)),
-      "(", repeat(seq($.identifier, "=", $.value, optional(","))), ")"
+      choice(field('name', $.identifier), seq(field('scope', $.identifier), "::", field('name', $.identifier))),
+      "(", field('arguments', repeat(seq($.identifier, "=", $.value, optional(",")))), ")"
     ),
     _expr: $ => seq(choice(
       $.identifier,
@@ -80,13 +83,13 @@ module.exports = grammar({
     )),
     macro_statement: $ => seq(
       statement(seq(
-       "macro", $.identifier,
+       "macro", field('name', $.identifier),
        "(",
-       repeat(seq($.identifier, optional(seq("=", $.literal)), optional(","))),
+       field('arguments', repeat(seq($.identifier, optional(seq("=", $.literal)), optional(",")))),
         ")"
       )),
       repeat($._template),
-      statement("endmacro")
+      statement(seq("endmacro", $.identifier))
     ),
     filter_statement: $ => seq(
       statement(seq(
