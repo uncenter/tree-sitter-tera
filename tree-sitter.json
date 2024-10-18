@@ -5,6 +5,7 @@
       "camelcase": "Tera",
       "scope": "source.tera",
       "path": ".",
+      "highlights": "queries/highlights.scm",
       "file-types": ["tera"],
       "injection-regex": "^tera$"
     }
