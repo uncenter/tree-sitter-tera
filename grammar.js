@@ -16,7 +16,7 @@ module.exports = grammar({
         seq('"', repeat(/[^"]/), '"'),
         seq('`', repeat(/[`"]/), '`')
       ),
-    literal: $ => choice($.bool, $.number, $.string),
+    _literal: $ => choice($.bool, $.number, $.string),
     array: $ => seq("[", repeat(seq($._value, optional(","))), "]"),
     identifier: $ => /\w+/,
     
@@ -46,7 +46,7 @@ module.exports = grammar({
       $.identifier,
       $.member_expression,
 
-      $.literal,
+      $._literal,
       $.array,
       $.binary_expression,
       $.unary_expression,
@@ -75,6 +75,8 @@ module.exports = grammar({
     _statement_tag: $ => choice(
       $.if_statement,
       $.for_statement,
+      $.for_break_statement,
+      $.for_continue_statement,
       $.set_statement,
       $.include_statement,
       $.import_statement,
@@ -106,9 +108,11 @@ module.exports = grammar({
         "in",
         field('right', $._value),
       )),
-      field('body', choice(repeat($._template), alias(statement("break"), $.for_break_statement), alias(statement("continue"), $.for_continue_statement))),
+      field('body', repeat($._template)),
       statement("endfor")
     ),
+    for_break_statement: $ => statement("break"),
+    for_continue_statement: $ => statement("continue"),
     set_statement: $ => statement(seq(
       choice("set", "set_global"), $.assignment_expression
     )),
@@ -125,7 +129,7 @@ module.exports = grammar({
       statement(seq(
        "macro", field('name', $.identifier),
        "(",
-       field('arguments', repeat(seq($.identifier, optional(seq("=", $.literal)), optional(",")))),
+       field('arguments', repeat(seq($.identifier, optional(seq("=", $._literal)), optional(",")))),
         ")"
       )),
       repeat($._template),
