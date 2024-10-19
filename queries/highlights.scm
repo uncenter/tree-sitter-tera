@@ -1,3 +1,5 @@
+; Syntax highlighting scopes for Helix: https://docs.helix-editor.com/themes.html.
+
 ; Variables
 ;----------
 
