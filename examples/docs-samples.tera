@@ -1,0 +1,171 @@
+{# Strings and concatenation #}
+
+{{ "hello " ~ 'world' ~ `!` }}
+
+{{ an_ident ~ " and a string" ~ another_ident }}
+
+{{ an_ident ~ another_ident }}
+
+{# Variables #}
+
+{% set my_var = "hello" %}
+{% set my_var = 1 + 4 %}
+{% set my_var = some_var %}
+{% set my_var = macros::some_macro() %}
+{% set my_var = global_fn() %}
+{% set my_var = [1, true, some_var | round] %}
+
+{% set_global foo = "bar" %}
+
+{# Filters #}
+
+{{ 1 + a | length }}
+{# is equal to #}
+{{ (1 + a) | length } {# this will probably error #}
+
+{# This will do what you wanted initially #}
+{{ a | length + 1 }}
+
+{# Filter sections and blocks #}
+
+{% filter upper %}
+    Hello
+{% endfilter %}
+
+{# Applies `upper` filter to "Hello" -> "HELLO" #}
+
+{% filter upper %}
+  {% block content_to_be_upper_cased %}
+    This will be upper-cased
+  {% endblock content_to_be_upper_cased %} 
+{% endfilter %}
+
+{# tests #}
+
+{% if my_number is odd %}
+ Odd
+{% endif %}
+
+{% if my_number is not odd %}
+ Even
+{% endif %}
+
+{% if rating is divisibleby(2) %}
+    Divisible
+{% endif %}
+
+{% if path is starting_with("x/") %}
+    In section x
+{% endif %}
+
+{% if name is matching("^[Qq]ueen") %}
+    Her Royal Highness, {{ name }}
+{% elif name is matching("^[Kk]ing") %}
+    His Royal Highness, {{ name }}
+{% else %}
+    {{ name }}
+{% endif %}
+
+{# Functions #}
+
+{{ url_for(name="home") }}
+
+{# Control structures #}
+
+{% if price < 10 or always_show %}
+   Price is {{ price }}.
+{% elif price > 1000 and not rich %}
+   That's expensive!
+{% else %}
+    N/A
+{% endif %}
+
+{% if my_var %}
+    {{ my_var }}
+{% else %}
+    Sorry, my_var isn't defined.
+{% endif %}
+
+{% for product in products %}
+  {{loop.index}}. {{product.name}}
+{% endfor %}
+
+{% for letter in name %}
+  {% if loop.index % 2 == 0 %}
+    <span style="color:red">{{ letter }}</span>
+  {% else %}
+    <span style="color:blue">{{ letter }}</span>
+  {% endif %}
+{% endfor %}
+
+{% for key, value in products %}
+  {{key}}. {{value.name}}
+{% endfor %}
+
+{% for product in products | reverse %}
+  {{loop.index}}. {{product.name}}
+{% endfor %}
+
+{% for a in [1,2,3,] %}
+  {{a}}
+{% endfor %}
+
+{% for product in products %}
+  {{loop.index}}. {{product.name}}
+{% else %}
+  No products.
+{% endfor %}
+
+{% for product in products %}
+  {% if product.id == target_id %}{% break %}{% endif %}
+  {{loop.index}}. {{product.name}}
+{% endfor %}
+
+{% for product in products %}
+  {% if loop.index is even %}{% continue %}{% endif %}
+  {{loop.index}}. {{product.name}}
+{% endfor %}
+
+{# Macros #}
+
+{% macro input(label, type="text") %}
+    <label>
+        {{ label }}
+        <input type="{{type.a}}" />
+    </label>
+{% endmacro input %}
+
+{{ macros::input(label="Name", type="text") }}
+
+{% import "macros.html" as macros %}
+
+{# in checking #}
+{{ some_var in [1, 2, 3] }}
+
+{{ 'index' in page.path }}
+
+{{ an_ident not in an_obj }}
+
+{# Other #}
+
+{% for name, author_posts in posts | group_by(attribute="author.name") %}
+    {{ name }}
+    {% for post in author_posts %}
+        {{ post.year }}: {{ post.content }}
+    {% endfor %}
+{% endfor %}
+
+{% set map = section.pages | group_by(attribute="year") %}
+{% set_global years = [] %}
+{% for year, ignored in map %}
+    {% set_global years = years | concat(with=year) %}
+{% endfor %}
+{% for year in years | reverse %}
+    {% set posts = map[year] %}
+{% endfor %}
+
+{{ "2019-09-19T13:18:48.731Z" | date(timezone="America/New_York") }}
+
+{{ "2019-09-19T13:18:48.731Z" | date(format="%Y-%m-%d %H:%M", timezone="Asia/Shanghai") }}
+
+{{ 1648252203 | date(timezone="Europe/Berlin") }}
