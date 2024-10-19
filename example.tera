@@ -30,7 +30,7 @@
 
 
 {% for letter in name %}
-  {% if loop.index % 2 == 0%}
+  {% if loop.index % 2 == 0 %}
     <span style="color:red">{{ letter }}</span>
   {% else %}
     <span style="color:blue">{{ letter }}</span>
