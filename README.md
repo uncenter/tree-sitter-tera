@@ -13,6 +13,44 @@
 2. Run `hx --grammar fetch` to fetch the grammar from this repository, and then `hx --grammar build` to build the grammars.
 3. Run `just helix sync` or `just helix link` to copy or symlink the [queries](./queries) to Helix's runtime directory, as unfortunately [queries are not used from the grammar repository by default](https://github.com/helix-editor/helix/discussions/11379#discussioncomment-10194806).
 
+### neovim
+
+#### Lazy.nvim installation
+
+Extend your treesitter plugin with the tera plugin.
+
+```lua
+{
+    "nvim-treesitter/nvim-treesitter",
+    config = function()
+        -- setup treesitter with config
+    end,
+    dependencies = {
+        ...
+        { "uncenter/tree-sitter-tera", build = ":TSUpdate tera" },
+        ...
+    },
+    build = ":TSUpdate",
+},
+```
+
+#### Manual installation
+
+```lua
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+parser_config.tera = {
+  install_info = {
+    url = "https://github.com/uncenter/tree-sitter-tera",
+    files = { "src/parser.c" },
+    branch = "main",
+  },
+  filetype = "tera",
+}
+```
+
+Run `:TSInstall tera` in neovim to install the above parser.
+
 ## License
 
 [MIT](LICENSE)
