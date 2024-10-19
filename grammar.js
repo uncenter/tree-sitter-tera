@@ -22,11 +22,12 @@ module.exports = grammar({
 		identifier: ($) => /\w+/,
 
 		/* Expressions */
-		member_expression: ($) =>
+		member_expression: ($) => prec.left(
 			seq(
-				$.identifier,
-				repeat1(seq('.', alias($.identifier, $.property_identifier))),
-			),
+				field('value', choice($.parenthesized_expression, $.member_expression, $.identifier, $.array, $.call_expression)),
+				repeat1(choice(seq('.', field('property', $.identifier)), seq('[', field('index', $._value), ']'))),
+			)),
+		parenthesized_expression: $ => seq('(', $._value, ')'),
 		binary_expression: ($) => {
 			const exp = (op) =>
 				seq(
@@ -35,7 +36,7 @@ module.exports = grammar({
 					field('right', $._value),
 				);
 			return choice(
-				...['*', '/', '%', '|'].map((op) => prec.left(2, exp(op))),
+				...['*', '/', '%'].map((op) => prec.left(2, exp(op))),
 				...['+', '-', '~'].map((op) => prec.left(1, exp(op))),
 				...[
 					'==',
@@ -51,6 +52,7 @@ module.exports = grammar({
 				].map((op) => prec.left(exp(op))),
 			);
 		},
+		filter_expression: $ => prec.left(2, seq(field('value', $._value), field('operator', '|'), field('filter', seq($.identifier)), optional(field('arguments', $.argument_list)))),
 		unary_expression: ($) =>
 			prec(3, choice(seq('-', $._value), seq('not', $._value))),
 		assignment_expression: ($) =>
@@ -73,18 +75,18 @@ module.exports = grammar({
 
 		// Something that can resolve to a value.
 		_value: ($) =>
-			seq(
 				choice(
 					$.identifier,
 					$.member_expression,
+					$.parenthesized_expression,
 
 					$._literal,
 					$.array,
 					$.binary_expression,
 					$.unary_expression,
 					$.call_expression,
+					$.filter_expression,
 				),
-			),
 
 		/* Tags */
 		_template: ($) =>
