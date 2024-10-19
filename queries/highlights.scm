@@ -8,7 +8,8 @@
 ; Properties
 ;-----------
 
-(property_identifier) @property
+(member_expression
+  property: (identifier) @property)
 
 ; Literals
 ;-----------
@@ -106,17 +107,24 @@
   "endmacro"
 ] @keyword
 
+; Functions
+
 (macro_statement
   name: (identifier) @function
-  parameter: (identifier) @variable.parameter)
+  (parameter_list
+    parameter: (identifier) @variable.parameter
+    (optional_parameter
+      name: (identifier) @variable.parameter)))
 
 (call_expression
   scope: (identifier)? @namespace
   name: (identifier) @function)
 
+(filter_expression
+  filter: (identifier) @function.method)
+
+; Namespaces
+
 (import_statement
   scope: (identifier) @namespace)
 
-(binary_expression
-  operator: "|"
-  right: (identifier) @function.method)
