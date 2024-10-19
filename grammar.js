@@ -64,7 +64,10 @@ module.exports = grammar({
 				optional(seq(field('scope', $.identifier), '::')),
 				field('name', $.identifier),
 				'(',
-				repeat(seq($.identifier, '=', $._value, optional(','))),
+				repeat(
+					// Kwarg sequence (var=) is optional since built-in tests *do* accept positional arguments, unlike macros/user-defined functions.
+					seq(optional(seq($.identifier, '=')), $._value, optional(','))
+				),
 				')',
 			),
 
