@@ -15,7 +15,7 @@
 
 (bool) @constant.builtin
 
-(number) @number
+(number) @constant.numeric
 
 ; Tokens
 ;-----------
@@ -40,7 +40,6 @@
   ">"
   "<="
   ">="
-  "::"
 ] @operator
 
 [
@@ -52,6 +51,7 @@
   "%}"
   "}}"
   "{{"
+  "::"
 ] @punctuation.bracket
 
 ; Tags
@@ -91,6 +91,9 @@
 [
   "break"
   "continue"
+] @keyword.control.return
+
+[
   "set"
   "set_global"
   "filter"
@@ -102,13 +105,12 @@
 ] @keyword
 
 (macro_statement
-  name: (identifier) @function)
+  name: (identifier) @function
+  parameter: (identifier) @variable.parameter)
 
 (call_expression
+  scope: (identifier) @namespace
   name: (identifier) @function)
-
-(call_expression
-  scope: (identifier) @namespace)
 
 (import_statement
   scope: (identifier) @namespace)

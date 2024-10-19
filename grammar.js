@@ -34,11 +34,11 @@ module.exports = grammar({
       seq('-', $._value),
       seq("not", $._value)
     )),
-    assignment_expression: $ => seq(choice($.identifier, $.member_expression), "=", $._value),
+    assignment_expression: $ => seq(field('left', choice($.identifier, $.member_expression)), field('operator', "="), field('right', $._value)),
     call_expression: $ => seq(
       optional(seq(field('scope', $.identifier), "::")),
       field('name', $.identifier),
-      "(", field('arguments', repeat(seq($.identifier, "=", $._value, optional(",")))), ")"
+      "(", repeat(seq($.identifier, "=", $._value, optional(","))), ")"
     ),
 
     // Something that can resolve to a value.
@@ -129,7 +129,7 @@ module.exports = grammar({
       statement(seq(
        "macro", field('name', $.identifier),
        "(",
-       field('arguments', repeat(seq($.identifier, optional(seq("=", $._literal)), optional(",")))),
+       repeat(seq(field('parameter', $.identifier), optional(seq("=", $._literal)), optional(","))),
         ")"
       )),
       repeat($._template),
