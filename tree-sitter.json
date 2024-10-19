@@ -1,35 +1,35 @@
 {
-  "grammars": [
-    {
-      "name": "tera",
-      "camelcase": "Tera",
-      "scope": "source.tera",
-      "path": ".",
-      "highlights": "queries/highlights.scm",
-      "file-types": ["tera"],
-      "injection-regex": "^tera$"
-    }
-  ],
-  "metadata": {
-    "version": "0.1.0",
-    "license": "MIT",
-    "description": "Tree-sitter grammar for the Tera templating language.",
-    "authors": [
-      {
-        "name": "uncenter",
-        "email": "uncenter@uncenter.dev"
-      }
-    ],
-    "links": {
-      "repository": "https://github.com/uncenter/tree-sitter-tera"
-    }
-  },
-  "bindings": {
-    "c": true,
-    "go": false,
-    "node": true,
-    "python": false,
-    "rust": true,
-    "swift": false
-  }
+	"grammars": [
+		{
+			"name": "tera",
+			"camelcase": "Tera",
+			"scope": "source.tera",
+			"path": ".",
+			"highlights": "queries/highlights.scm",
+			"file-types": ["tera"],
+			"injection-regex": "^tera$"
+		}
+	],
+	"metadata": {
+		"version": "0.1.0",
+		"license": "MIT",
+		"description": "Tree-sitter grammar for the Tera templating language.",
+		"authors": [
+			{
+				"name": "uncenter",
+				"email": "uncenter@uncenter.dev"
+			}
+		],
+		"links": {
+			"repository": "https://github.com/uncenter/tree-sitter-tera"
+		}
+	},
+	"bindings": {
+		"c": true,
+		"go": false,
+		"node": true,
+		"python": false,
+		"rust": true,
+		"swift": false
+	}
 }
