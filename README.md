@@ -17,6 +17,8 @@
 
 ### Neovim
 
+![](./assets/neovim.png)
+
 #### Lazy.nvim
 
 Extend your nvim-treesitter plugin with this Tera plugin.
