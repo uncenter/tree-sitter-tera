@@ -21,7 +21,7 @@
 
 {{ 1 + a | length }}
 {# is equal to #}
-{{ (1 + a) | length } {# this will probably error #}
+{{ (1 + a) | length }} {# this will probably error #}
 
 {# This will do what you wanted initially #}
 {{ a | length + 1 }}
