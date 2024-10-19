@@ -157,6 +157,7 @@ module.exports = grammar({
 					),
 				),
 				field('body', repeat($._template)),
+				optional(field('alternative', $.else_clause)),
 				statement('endfor'),
 			),
 		for_break_statement: ($) => statement('break'),
