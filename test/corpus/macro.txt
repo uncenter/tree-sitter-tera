@@ -11,7 +11,8 @@ Macro statements
 (source_file
   (macro_statement
     name: (identifier)
-    parameter: (identifier)
+    parameters: (parameter_list
+      parameter: (identifier))
     (if_statement
       condition: (binary_expression
         left: (identifier)
@@ -23,10 +24,12 @@ Macro statements
         (call_expression
           scope: (identifier)
           name: (identifier)
-          (identifier)
-          (binary_expression
-            left: (identifier)
-            right: (number))))
+          arguments: (argument_list
+            (keyword_argument
+              name: (identifier)
+              value: (binary_expression
+                left: (identifier)
+                right: (number))))))
       alternative: (else_clause
         consequence: (content)))
     (identifier))

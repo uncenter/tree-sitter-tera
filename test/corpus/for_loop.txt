@@ -20,8 +20,8 @@ For statements
       condition: (binary_expression
         left: (binary_expression
           left: (member_expression
-            (identifier)
-            (property_identifier))
+            value: (identifier)
+            property: (identifier))
           right: (number))
         right: (number))
       consequence: (content)
