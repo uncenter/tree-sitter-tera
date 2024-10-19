@@ -15,7 +15,7 @@ module.exports = grammar({
 			choice(
 				seq("'", repeat(/[^']/), "'"),
 				seq('"', repeat(/[^"]/), '"'),
-				seq('`', repeat(/[`"]/), '`'),
+				seq('`', repeat(/[^`]/), '`'),
 			),
 		_literal: ($) => choice($.bool, $.number, $.string),
 		array: ($) => seq('[', repeat(seq($._value, optional(','))), ']'),
