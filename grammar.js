@@ -18,7 +18,7 @@ module.exports = grammar({
 				seq('`', repeat(/[^`]/), '`'),
 			),
 		_literal: ($) => choice($.bool, $.number, $.string),
-		array: ($) => seq('[', repeat(seq($._value, optional(','))), ']'),
+		array: ($) => seq('[', commaSep($._value), ']'),
 		identifier: ($) => /\w+/,
 
 		/* Expressions */
@@ -59,17 +59,16 @@ module.exports = grammar({
 				field('operator', '='),
 				field('right', $._value),
 			),
+		keyword_argument: ($) =>
+			seq(field('name', $.identifier), '=', field('value', $._value)),
+		argument_list: ($) =>
+			seq('(', commaSep(choice($.keyword_argument, $._value)), ')'),
 		call_expression: ($) =>
 			seq(
 				/* Optionally a function name can be preceded by a scope/namespace; from importing, or `self` for custom macros in the current file. */
 				optional(seq(field('scope', $.identifier), '::')),
 				field('name', $.identifier),
-				'(',
-				repeat(
-					// Kwarg sequence (var=) is optional since built-in tests *do* accept positional arguments, unlike macros/user-defined functions.
-					seq(optional(seq($.identifier, '=')), $._value, optional(','))
-				),
-				')',
+				field('arguments', $.argument_list),
 			),
 
 		// Something that can resolve to a value.
@@ -181,21 +180,30 @@ module.exports = grammar({
 				seq('import', $.string, 'as', field('scope', $.identifier)),
 			),
 		extends_statement: ($) => statement(seq('extends', $.string)),
+		optional_parameter: ($) =>
+			seq(
+				field('name', $.identifier),
+				'=',
+				field('value', $._literal),
+			),
+		parameter_list: ($) =>
+			seq(
+				'(',
+				commaSep(
+					choice(
+						field('parameter', $.identifier),
+						$.optional_parameter,
+					),
+				),
+				')',
+			),
 		macro_statement: ($) =>
 			seq(
 				statement(
 					seq(
 						'macro',
 						field('name', $.identifier),
-						'(',
-						repeat(
-							seq(
-								field('parameter', $.identifier),
-								optional(seq('=', $._literal)),
-								optional(','),
-							),
-						),
-						')',
+						field('parameters', $.parameter_list),
 					),
 				),
 				repeat($._template),
@@ -219,4 +227,8 @@ module.exports = grammar({
 // Helper function to create statements ({% ... %}) without repeating the brackets and the optional whitespace trimming parts.
 function statement(inner) {
 	return seq('{%', optional('-'), inner, optional('-'), '%}');
+}
+
+function commaSep(rule) {
+	return optional(seq(rule, repeat(seq(',', rule)), optional(',')));
 }
