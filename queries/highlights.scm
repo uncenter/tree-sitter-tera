@@ -111,7 +111,7 @@
   parameter: (identifier) @variable.parameter)
 
 (call_expression
-  scope: (identifier) @namespace
+  scope: (identifier)? @namespace
   name: (identifier) @function)
 
 (import_statement
