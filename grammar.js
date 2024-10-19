@@ -61,6 +61,7 @@ module.exports = grammar({
 			),
 		call_expression: ($) =>
 			seq(
+				/* Optionally a function name can be preceded by a scope/namespace; from importing, or `self` for custom macros in the current file. */
 				optional(seq(field('scope', $.identifier), '::')),
 				field('name', $.identifier),
 				'(',
@@ -160,6 +161,7 @@ module.exports = grammar({
 				optional(field('alternative', $.else_clause)),
 				statement('endfor'),
 			),
+		// Can't only put inside break & continue statements in `for_statement`, as `if_statement`s within `for_statement`s can contain them.
 		for_break_statement: ($) => statement('break'),
 		for_continue_statement: ($) => statement('continue'),
 		set_statement: ($) =>
@@ -214,6 +216,7 @@ module.exports = grammar({
 	},
 });
 
+// Helper function to create statements ({% ... %}) without repeating the brackets and the optional whitespace trimming parts.
 function statement(inner) {
 	return seq('{%', optional('-'), inner, optional('-'), '%}');
 }
