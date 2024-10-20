@@ -66,6 +66,12 @@
     {{ name }}
 {% endif %}
 
+{% if x is custom_test %}
+Do something...
+{% endif %}
+
+{{ not true }}
+
 {# Functions #}
 
 {{ url_for(name="home") }}
