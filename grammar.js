@@ -120,6 +120,7 @@ module.exports = grammar({
 				$.macro_statement,
 				$.filter_statement,
 				$.block_statement,
+				$.raw_statement
 			),
 
 		if_statement: ($) =>
@@ -223,6 +224,12 @@ module.exports = grammar({
 				statement(seq('block', $.identifier)),
 				repeat($._template),
 				statement(seq('endblock', $.identifier)),
+			),
+		raw_statement: ($) =>
+			seq(
+				statement('raw'),
+				field('body', repeat($._template)),
+				statement('endraw'),
 			),
 	},
 });

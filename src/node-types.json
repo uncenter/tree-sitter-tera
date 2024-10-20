@@ -434,6 +434,10 @@
           "named": true
         },
         {
+          "type": "raw_statement",
+          "named": true
+        },
+        {
           "type": "set_statement",
           "named": true
         }
@@ -596,6 +600,10 @@
             "named": true
           },
           {
+            "type": "raw_statement",
+            "named": true
+          },
+          {
             "type": "set_statement",
             "named": true
           }
@@ -661,6 +669,10 @@
           },
           {
             "type": "macro_statement",
+            "named": true
+          },
+          {
+            "type": "raw_statement",
             "named": true
           },
           {
@@ -892,6 +904,10 @@
           "named": true
         },
         {
+          "type": "raw_statement",
+          "named": true
+        },
+        {
           "type": "set_statement",
           "named": true
         }
@@ -976,6 +992,10 @@
           },
           {
             "type": "macro_statement",
+            "named": true
+          },
+          {
+            "type": "raw_statement",
             "named": true
           },
           {
@@ -1179,6 +1199,10 @@
             "named": true
           },
           {
+            "type": "raw_statement",
+            "named": true
+          },
+          {
             "type": "set_statement",
             "named": true
           }
@@ -1355,6 +1379,10 @@
           },
           {
             "type": "macro_statement",
+            "named": true
+          },
+          {
+            "type": "raw_statement",
             "named": true
           },
           {
@@ -1603,6 +1631,78 @@
     }
   },
   {
+    "type": "raw_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "block_statement",
+            "named": true
+          },
+          {
+            "type": "comment_tag",
+            "named": true
+          },
+          {
+            "type": "content",
+            "named": true
+          },
+          {
+            "type": "expression_tag",
+            "named": true
+          },
+          {
+            "type": "extends_statement",
+            "named": true
+          },
+          {
+            "type": "filter_statement",
+            "named": true
+          },
+          {
+            "type": "for_break_statement",
+            "named": true
+          },
+          {
+            "type": "for_continue_statement",
+            "named": true
+          },
+          {
+            "type": "for_statement",
+            "named": true
+          },
+          {
+            "type": "if_statement",
+            "named": true
+          },
+          {
+            "type": "import_statement",
+            "named": true
+          },
+          {
+            "type": "include_statement",
+            "named": true
+          },
+          {
+            "type": "macro_statement",
+            "named": true
+          },
+          {
+            "type": "raw_statement",
+            "named": true
+          },
+          {
+            "type": "set_statement",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "set_statement",
     "named": true,
     "fields": {},
@@ -1676,6 +1776,10 @@
         },
         {
           "type": "macro_statement",
+          "named": true
+        },
+        {
+          "type": "raw_statement",
           "named": true
         },
         {
@@ -1910,6 +2014,10 @@
     "named": false
   },
   {
+    "type": "endraw",
+    "named": false
+  },
+  {
     "type": "extends",
     "named": false
   },
@@ -1963,6 +2071,10 @@
   },
   {
     "type": "or",
+    "named": false
+  },
+  {
+    "type": "raw",
     "named": false
   },
   {
