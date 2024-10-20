@@ -110,6 +110,8 @@
   "endblock"
   "macro"
   "endmacro"
+  "raw"
+  "endraw"
 ] @keyword
 
 ; Functions
