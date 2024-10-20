@@ -14,7 +14,7 @@
 ;-----------
 
 (member_expression
-  property: (identifier) @property)
+  property: (identifier)? @property)
 
 ; Literals
 ;-----------
