@@ -100,11 +100,11 @@ module.exports = grammar({
 
 		// Comment
 		comment_tag: ($) =>
-			seq('{#', optional('-'), /[^#]+/, optional('-'), '#}'),
+			seq(choice('{#', '{#-'), /[^#]+/, choice('#}', '-#}')),
 
 		// Expression
 		expression_tag: ($) =>
-			seq('{{', optional('-'), $._value, optional('-'), '}}'),
+			seq(choice('{{', '{{-'), $._value, choice('}}', '-}}')),
 
 		// Statements
 		_statement_tag: ($) =>
@@ -229,7 +229,7 @@ module.exports = grammar({
 
 // Helper function to create statements ({% ... %}) without repeating the brackets and the optional whitespace trimming parts.
 function statement(inner) {
-	return seq('{%', optional('-'), inner, optional('-'), '%}');
+	return seq(choice('{%', '{%-'), inner, choice('%}', '-%}'));
 }
 
 function commaSep(rule) {
