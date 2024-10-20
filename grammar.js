@@ -48,8 +48,7 @@ module.exports = grammar({
 					'>=',
 					'in',
 					'and',
-					'or',
-					'is',
+					'or'
 				].map((op) => prec.left(exp(op))),
 			);
 		},
@@ -64,15 +63,15 @@ module.exports = grammar({
 			),
 		keyword_argument: ($) =>
 			seq(field('name', $.identifier), '=', field('value', $._value)),
-		argument_list: ($) =>
-			seq('(', commaSep(choice($.keyword_argument, $._value)), ')'),
+		argument_list: $ => seq('(', commaSep($.keyword_argument), ')'),
 		call_expression: ($) =>
 			seq(
-				/* Optionally a function name can be preceded by a scope/namespace; from importing, or `self` for custom macros in the current file. */
+				/* Optionally a function name can be preceded by a scope/namespace; from importing, or `self` for custom macros in the current file. Global funtions can exist without a scope. */
 				optional(seq(field('scope', $.identifier), '::')),
 				field('name', $.identifier),
 				field('arguments', $.argument_list),
 			),
+		test_expression: $ => seq(field('value', $._value), 'is', optional('not'), field('test', $.identifier), optional(field('argument', seq('(', $._value, ')')))),
 
 		// Something that can resolve to a value.
 		_value: ($) =>
@@ -125,7 +124,7 @@ module.exports = grammar({
 
 		if_statement: ($) =>
 			seq(
-				statement(field('condition', seq('if', $._value))),
+				statement(field('condition', seq('if', choice($._value, $.test_expression)))),
 				field('consequence', repeat($._template)),
 				optional(field('alternative', repeat($.elif_clause))),
 				optional(field('alternative', $.else_clause)),
@@ -135,7 +134,7 @@ module.exports = grammar({
 			prec.right(
 				1,
 				seq(
-					statement(field('condition', seq('elif', $._value))),
+					statement(field('condition', seq('elif', choice($._value, $.test_expression)))),
 					field('consequence', repeat($._template)),
 				),
 			),
