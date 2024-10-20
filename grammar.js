@@ -209,7 +209,7 @@ module.exports = grammar({
 						field('parameters', $.parameter_list),
 					),
 				),
-				repeat($._template),
+				field('body', repeat($._template)),
 				statement(seq('endmacro', optional($.identifier))),
 			),
 		filter_statement: ($) =>
