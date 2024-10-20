@@ -32,5 +32,4 @@ For statements
         consequence: (content)
         consequence: (expression_tag
           (identifier))
-        consequence: (content))))
-  (content))
+        consequence: (content)))))
