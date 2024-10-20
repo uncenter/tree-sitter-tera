@@ -133,7 +133,14 @@
     "now"
     "throw"
     "get_random"
-    "get_env"
+    "get_env"))
+
+(test_expression
+  test: (identifier) @function)
+
+(test_expression
+  test: (identifier) @function.builtin
+  (#any-of? @function.builtin
     ; Tests - https://keats.github.io/tera/docs/#built-in-tests
     "defined"
     "undefined"
