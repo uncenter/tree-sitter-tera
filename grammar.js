@@ -210,7 +210,7 @@ module.exports = grammar({
 					),
 				),
 				repeat($._template),
-				statement(seq('endmacro', $.identifier)),
+				statement(seq('endmacro', optional($.identifier))),
 			),
 		filter_statement: ($) =>
 			seq(
