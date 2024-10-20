@@ -9,10 +9,6 @@
         "name": "_template"
       }
     },
-    "content": {
-      "type": "PATTERN",
-      "value": "([^{]|[{][^{%#])+"
-    },
     "bool": {
       "type": "TOKEN",
       "content": {
@@ -2499,7 +2495,12 @@
   ],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "content"
+    }
+  ],
   "inline": [],
   "supertypes": []
 }
