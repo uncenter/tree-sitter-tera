@@ -2,11 +2,18 @@
 
 [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammar and syntax highlight queries for the [Tera](https://keats.github.io/tera/) templating language.
 
+&nbsp;
+
+| [![](./assets/helix.png)](./assets/helix.png) | [![](./assets/neovim.png)](./assets/neovim.png) |
+| --------------------------------------------- | ----------------------------------------------- |
+
+_Helix and Neovim, respectively. Screenshots taken with the [catppuccin/helix](https://github.com/catppuccin/helix) and [catppuccin/nvim](https://github.com/catppuccin/nvim) themes._
+
+&nbsp;
+
 ## Usage
 
 ### Helix
-
-![](./assets/helix.png)
 
 1. Add the following language and grammar configuration to your own [`languages.toml` configuration file](https://docs.helix-editor.com/configuration.html):
 
@@ -48,8 +55,6 @@ block-comment-tokens = [
 > Helix [uses the reverse query precedence ordering](https://github.com/helix-editor/helix/issues/9436), meaning that the _first_ matching highlight query is used rather than last; this is the opposite behavior of Neovim and Zed, both of which use the _last_ matching highlight query - think of it like CSS, where queries gain precedence by being located further down. Helix does seemingly plan to change this soon, but for now this repository has a separate folder for Helix-converted queries (built with `just helix build`, using [tree-sitter-query-reverser](https://github.com/uncenter/tree-sitter-query-reverser).
 
 ### Neovim
-
-![](./assets/neovim.png)
 
 #### Lazy.nvim
 
