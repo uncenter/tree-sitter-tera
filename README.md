@@ -4,10 +4,15 @@
 
 &nbsp;
 
-| [![](./assets/helix.png)](./assets/helix.png) | [![](./assets/neovim.png)](./assets/neovim.png) |
-| --------------------------------------------- | ----------------------------------------------- |
+| [![](./assets/helix.png)](./assets/helix.png) |
+| --------------------------------------------- |
 
-_Helix and Neovim, respectively. Screenshots taken with the [catppuccin/helix](https://github.com/catppuccin/helix) and [catppuccin/nvim](https://github.com/catppuccin/nvim) themes._
+_Helix with tree-sitter-tera. Screenshot taken with the [catppuccin/helix](https://github.com/catppuccin/helix) theme._
+
+| [![](./assets/neovim.png)](./assets/neovim.png) |
+| ----------------------------------------------- |
+
+_Neovim with tree-sitter-tera. Screenshot taken with the [catppuccin/nvim](https://github.com/catppuccin/nvim) theme._
 
 &nbsp;
 
