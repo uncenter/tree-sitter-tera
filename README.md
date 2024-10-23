@@ -2,19 +2,13 @@
 
 [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammar and syntax highlight queries for the [Tera](https://keats.github.io/tera/) templating language.
 
-&nbsp;
-
-| [![](./assets/helix.png)](./assets/helix.png) |
-| --------------------------------------------- |
+[![Screenshot of highlighted sample Tera code in Helix with the tree-sitter-tera grammar installed](./assets/helix.png)](./assets/helix.png)
 
 _Helix with tree-sitter-tera. Screenshot taken with the [catppuccin/helix](https://github.com/catppuccin/helix) theme._
 
-| [![](./assets/neovim.png)](./assets/neovim.png) |
-| ----------------------------------------------- |
+[![Screenshot of highlighted sample Tera code in Neovim with the tree-sitter-tera grammar installed](./assets/neovim.png)](./assets/neovim.png)
 
 _Neovim with tree-sitter-tera. Screenshot taken with the [catppuccin/nvim](https://github.com/catppuccin/nvim) theme._
-
-&nbsp;
 
 ## Usage
 
