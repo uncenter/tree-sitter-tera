@@ -25,8 +25,8 @@ unsigned tree_sitter_tera_external_scanner_serialize(void *payload, char *buffer
 void tree_sitter_tera_external_scanner_deserialize(void *payload, const char *buffer, unsigned length) {}
 
 bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
-    bool found_content = false;
     bool at_possible_tag_start = false;
+    bool found_content = false;
 
     if (valid_symbols[CONTENT]) {
         // Loop through characters until we exit early or reach EOF.
@@ -50,19 +50,18 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
                 // Set our possible tag flag to true so that we can confirm on the next iteration.
                 at_possible_tag_start = true;
             } else {
-                // The character isn't whitespace or possibly the start of a Tera tag, so it is actual content. We set the flag to be so.
-                if (!iswspace(lexer->lookahead)) found_content = true;
+                found_content = true;
             }
             lexer->advance(lexer, false);
         }
 
-        // We have reached the start of a Tera tag or the end of the file. If we have found content in the range, we return true and the range becomes a content token.
+        // We have reached the start of a Tera tag or the end of the file. We return true and the range becomes a content token.
         if (found_content) {
             lexer->result_symbol = CONTENT;
             return true;
         }
     }
 
-    // We have either reached the start of a Tera tag or the end of file and *not* found content, or content is not a valid symbol at this time, so we return false to indicate no token here.
+    // Content is not a valid symbol at this time, so we return false to indicate no token here.
     return false;
 }
