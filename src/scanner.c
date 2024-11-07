@@ -27,7 +27,6 @@ void tree_sitter_tera_external_scanner_deserialize(void *payload, const char *bu
 bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
     bool found_content = false;
     bool at_possible_tag_start = false;
-    bool last_is_whitespace = false;
 
     if (valid_symbols[CONTENT]) {
         // Loop through characters until we exit early or reach EOF.
@@ -44,34 +43,17 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
                 }
             }
 
-            // If the character is whitespace...
-            if (iswspace(lexer->lookahead)) {
-                if (!found_content) {
-                    // If we have not found any content up to this point, advance and *do not add this character to the token* (trims leading whitespace before the token, if any).
-                    lexer->advance(lexer, true);
-                } else {
-                    // Since we have found content before this whitespace character, we will mark the end of the token here as long as the previous character wasn't also whitespace (which would mean we had already marked the end previously, at the last bit of actual content). We might find content after this whitespace in the future, in which case we will mark the end again later, adding this whitespace as part of the range of content.
-                    if (!last_is_whitespace) lexer->mark_end(lexer);
-                    // We have marked the end now or on the previous iteration, we will now just advance.
-                    lexer->advance(lexer, false);
-                }
-                // Either way, this character is whitespace so we will set our flag so that the next iteration is aware of this previous whitespace character.
-                last_is_whitespace = true;
             // If the character is a {, meaning possibly the end of the content token and the start of a Tera tag...
-            } else if (lexer->lookahead == '{') {
-                // Mark the end of the token here as long as the last token was content and not whitespace.
-                if (!last_is_whitespace) lexer->mark_end(lexer);
-                lexer->advance(lexer, false);
+            if (lexer->lookahead == '{') {
+                // Mark the end of the token here.
+                lexer->mark_end(lexer);
                 // Set our possible tag flag to true so that we can confirm on the next iteration.
                 at_possible_tag_start = true;
             } else {
                 // The character isn't whitespace or possibly the start of a Tera tag, so it is actual content. We set the flag to be so.
-                found_content = true;
-                // We reset the last is whitespace flag since it is not, it is content.
-                last_is_whitespace = false;
-                // Advance!
-                lexer->advance(lexer, false);
+                if (!iswspace(lexer->lookahead)) found_content = true;
             }
+            lexer->advance(lexer, false);
         }
 
         // We have reached the start of a Tera tag or the end of the file. If we have found content in the range, we return true and the range becomes a content token.
