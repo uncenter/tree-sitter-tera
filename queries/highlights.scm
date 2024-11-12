@@ -116,6 +116,7 @@
   "endmacro"
   "raw"
   "endraw"
+  "as"
 ] @keyword
 
 ; Functions

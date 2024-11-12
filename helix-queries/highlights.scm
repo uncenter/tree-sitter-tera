@@ -102,6 +102,7 @@
   "endmacro"
   "raw"
   "endraw"
+  "as"
 ] @keyword
 [
   "break"
