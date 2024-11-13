@@ -57,8 +57,12 @@
   "]"
   "{%"
   "%}"
+  "-%}"
+  "{%-"
   "}}"
   "{{"
+  "-}}"
+  "{{-"
   "::"
 ] @punctuation.bracket
 
@@ -110,6 +114,9 @@
   "endblock"
   "macro"
   "endmacro"
+  "raw"
+  "endraw"
+  "as"
 ] @keyword
 
 ; Functions

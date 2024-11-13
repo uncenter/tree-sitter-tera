@@ -1,0 +1,41 @@
+==================
+Filter expressions
+==================
+
+{{ "2019-09-19T13:18:48.731Z" | date(format="%Y-%m-%d %H:%M", timezone="Asia/Shanghai") | some_filter }}
+
+{{ rosewater | mix(color=base, amount=0.7) | get(key="hex") }}
+
+---
+
+(source_file
+  (expression_tag
+    (filter_expression
+      value: (filter_expression
+        value: (string)
+        filter: (identifier)
+        arguments: (argument_list
+          (keyword_argument
+            name: (identifier)
+            value: (string))
+          (keyword_argument
+            name: (identifier)
+            value: (string))))
+      filter: (identifier)))
+  (expression_tag
+    (filter_expression
+      value: (filter_expression
+        value: (identifier)
+        filter: (identifier)
+        arguments: (argument_list
+          (keyword_argument
+            name: (identifier)
+            value: (identifier))
+          (keyword_argument
+            name: (identifier)
+            value: (number))))
+      filter: (identifier)
+      arguments: (argument_list
+        (keyword_argument
+          name: (identifier)
+          value: (string))))))
