@@ -139,12 +139,9 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 					break;
 				} else {
 					// Since the character is not part of the start of a Tera tag, we can reset our possible bracket state and keep adding characters to the content token.
-						at_possible_tag_start = false;
+					at_possible_tag_start = false;
 				}
-			}
-
-			// If the character is a {, meaning possibly the end of the content token and the start of a Tera tag...
-			if (lexer->lookahead == '{') {
+			} else if (lexer->lookahead == '{') {
 				// Mark the end of the token here.
 				lexer->mark_end(lexer);
 				// Set our possible tag flag to true so that we can confirm on the next iteration.
@@ -152,6 +149,7 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 			} else {
 				found_content = true;
 			}
+
 			lexer->advance(lexer, false);
 		}
 
