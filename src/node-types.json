@@ -1723,6 +1723,14 @@
           "named": true
         },
         {
+          "type": "frontmatter_content",
+          "named": true
+        },
+        {
+          "type": "frontmatter_delimiter",
+          "named": true
+        },
+        {
           "type": "if_statement",
           "named": true
         },
@@ -2112,6 +2120,14 @@
   {
     "type": "for",
     "named": false
+  },
+  {
+    "type": "frontmatter_content",
+    "named": true
+  },
+  {
+    "type": "frontmatter_delimiter",
+    "named": true
   },
   {
     "type": "identifier",

@@ -3,11 +3,41 @@
   "name": "tera",
   "rules": {
     "source_file": {
-      "type": "REPEAT",
-      "content": {
-        "type": "SYMBOL",
-        "name": "_template"
-      }
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "frontmatter_delimiter"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "frontmatter_content"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "frontmatter_delimiter"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_template"
+          }
+        }
+      ]
     },
     "bool": {
       "type": "TOKEN",
@@ -2511,6 +2541,14 @@
   "conflicts": [],
   "precedences": [],
   "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "frontmatter_delimiter"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "frontmatter_content"
+    },
     {
       "type": "SYMBOL",
       "name": "content"
