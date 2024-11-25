@@ -7,9 +7,9 @@
 #include <wchar.h>
 
 enum TokenType {
-    FRONTMATTER_DELIMITER,
-    FRONTMATTER_CONTENT,
-    CONTENT
+	FRONTMATTER_DELIMITER,
+	FRONTMATTER_CONTENT,
+	CONTENT
 };
 
 typedef struct {
