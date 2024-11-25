@@ -9,10 +9,12 @@ Macro statements
 ---
 
 (source_file
+  (content)
   (macro_statement
     name: (identifier)
     parameters: (parameter_list
       parameter: (identifier))
+    body: (content)
     body: (if_statement
       condition: (binary_expression
         left: (identifier)
@@ -32,4 +34,6 @@ Macro statements
                 right: (number))))))
       alternative: (else_clause
         consequence: (content)))
-    (identifier)))
+    body: (content)
+    (identifier))
+  (content))
