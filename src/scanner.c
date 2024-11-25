@@ -87,35 +87,29 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 	}
 
 	if (valid_symbols[FRONTMATTER_CONTENT] && scanner->started_frontmatter) {
-		bool at_possible_delimiter_start = false;
+		bool marked_end = false;
 		bool found_content = false;
 
-		// Loop through characters until we exit early or reach EOF.
 		while (lexer->lookahead) {
-			// If the last character was a -, meaning possibly the end of the content token and the start of a delimiter...
-			if (at_possible_delimiter_start) {
-				// If the character, combined with the previous {, creates the start of a delimiter...
-				if (lexer->lookahead == '-') {
-					lexer->advance(lexer, false);
-					if (lexer->lookahead == '-') {
-						// Exit the loop of characters (to either return true if we had found content up to this point or false if not).
-						break;
-					}
-				}
-				// Since the character is not part of the start of a delimiter, we can reset our possible delimiter state and keep adding characters to the content token.
-				at_possible_delimiter_start = false;
-			}
+			marked_end = false;
 
 			// If the character is a -, meaning possibly the end of the content token and the start of a delimiter...
 			if (lexer->lookahead == '-') {
-				// Mark the end of the token here.
 				lexer->mark_end(lexer);
-				// Set our possible delimiter flag to true so that we can confirm on the next iteration.
-				at_possible_delimiter_start = true;
+				marked_end = true;
+				lexer->advance(lexer, false);
+				if (lexer->lookahead == '-') {
+					break;
+				} else {
+					found_content = true;
+				}
 			} else {
 				found_content = true;
+				lexer->advance(lexer, false);
 			}
-			lexer->advance(lexer, false);
+		}
+		if (!marked_end) {
+			lexer->mark_end(lexer);
 		}
 
 		// We have reached the start of a delimiter or the end of the file. We return true and the range becomes a content token.
@@ -126,31 +120,29 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 	}
 
 	if (valid_symbols[CONTENT]) {
-		bool at_possible_tag_start = false;
+		bool marked_end = false;
 		bool found_content = false;
 
-		// Loop through characters until we exit early or reach EOF.
 		while (lexer->lookahead) {
-			// If the last character was a {, meaning possibly the end of the content token and the start of a Tera tag...
-			if (at_possible_tag_start) {
-				// If the character, combined with the previous {, creates the start of a Tera tag...
+			marked_end = false;
+
+			// If the character is a {, meaning possibly the end of the content token and the start of a Tera tag...
+			if (lexer->lookahead == '{') {
+				lexer->mark_end(lexer);
+				marked_end = true;
+				lexer->advance(lexer, false);
 				if (lexer->lookahead == '{' || lexer->lookahead == '#' || lexer->lookahead == '%') {
-					// Exit the loop of characters (to either return true if we had found content up to this point or false if not).
 					break;
 				} else {
-					// Since the character is not part of the start of a Tera tag, we can reset our possible bracket state and keep adding characters to the content token.
-					at_possible_tag_start = false;
+					found_content = true;
 				}
-			} else if (lexer->lookahead == '{') {
-				// Mark the end of the token here.
-				lexer->mark_end(lexer);
-				// Set our possible tag flag to true so that we can confirm on the next iteration.
-				at_possible_tag_start = true;
 			} else {
 				found_content = true;
+				lexer->advance(lexer, false);
 			}
-
-			lexer->advance(lexer, false);
+		}
+		if (!marked_end) {
+			lexer->mark_end(lexer);
 		}
 
 		// We have reached the start of a Tera tag or the end of the file. We return true and the range becomes a content token.
