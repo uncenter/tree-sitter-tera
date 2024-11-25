@@ -8,7 +8,6 @@
 
 enum TokenType {
 	FRONTMATTER_DELIMITER,
-	FRONTMATTER_CONTENT,
 	CONTENT
 };
 
@@ -86,39 +85,6 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 		}
 	}
 
-	if (valid_symbols[FRONTMATTER_CONTENT] && scanner->started_frontmatter) {
-		bool marked_end = false;
-		bool found_content = false;
-
-		while (lexer->lookahead) {
-			marked_end = false;
-
-			// If the character is a -, meaning possibly the end of the content token and the start of a delimiter...
-			if (lexer->lookahead == '-') {
-				lexer->mark_end(lexer);
-				marked_end = true;
-				lexer->advance(lexer, false);
-				if (lexer->lookahead == '-') {
-					break;
-				} else {
-					found_content = true;
-				}
-			} else {
-				found_content = true;
-				lexer->advance(lexer, false);
-			}
-		}
-		if (!marked_end) {
-			lexer->mark_end(lexer);
-		}
-
-		// We have reached the start of a delimiter or the end of the file. We return true and the range becomes a content token.
-		if (found_content) {
-			lexer->result_symbol = FRONTMATTER_CONTENT;
-			return true;
-		}
-	}
-
 	if (valid_symbols[CONTENT]) {
 		bool marked_end = false;
 		bool found_content = false;
@@ -127,9 +93,25 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 			marked_end = false;
 
 			// If the character is a {, meaning possibly the end of the content token and the start of a Tera tag...
-			if (lexer->lookahead == '{') {
+			if (scanner->started_frontmatter && !scanner->ended_frontmatter && lexer->lookahead == '-') {
 				lexer->mark_end(lexer);
 				marked_end = true;
+
+				int dash_count = 0;
+				while (lexer->lookahead == '-' && dash_count < 3) {
+					lexer->advance(lexer, false);
+					dash_count++;
+				}
+
+				if (dash_count == 3) {
+					break;
+				} else {
+					found_content = true;
+				}
+			} else if (lexer->lookahead == '{') {
+				lexer->mark_end(lexer);
+				marked_end = true;
+
 				lexer->advance(lexer, false);
 				if (lexer->lookahead == '{' || lexer->lookahead == '#' || lexer->lookahead == '%') {
 					break;

@@ -6,12 +6,12 @@ module.exports = grammar({
 
 	externals: $ => [
 		$.frontmatter_delimiter,
-		$.frontmatter_content,
 		$.content
 	],
 
 	rules: {
-		source_file: ($) => seq(optional(seq($.frontmatter_delimiter, $.frontmatter_content, $.frontmatter_delimiter)), repeat($._template)),
+		source_file: ($) => seq(optional($.frontmatter), repeat($._template)),
+		frontmatter: ($) => seq($.frontmatter_delimiter, repeat($._template), $.frontmatter_delimiter),
 
 		/* Primitives */
 		bool: ($) => token(/[Tt]rue|[Ff]alse/),
