@@ -4,3 +4,5 @@
   <li><a href="{{ user.url }}">{{ user.username }}</a></li>
 {%- endfor %}
 </ul>
+
+{# !set-language: html #}
