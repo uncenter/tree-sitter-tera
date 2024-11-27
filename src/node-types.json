@@ -435,17 +435,7 @@
   {
     "type": "comment_tag",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "set_language_directive",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "elif_clause",
@@ -1748,11 +1738,6 @@
     }
   },
   {
-    "type": "set_language_directive",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "set_statement",
     "named": true,
     "fields": {},
@@ -2029,10 +2014,6 @@
   },
   {
     "type": "!=",
-    "named": false
-  },
-  {
-    "type": "!set-language:",
     "named": false
   },
   {

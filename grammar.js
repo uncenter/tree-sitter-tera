@@ -102,9 +102,8 @@ module.exports = grammar({
 			),
 
 		// Comment
-		set_language_directive: ($) => prec(3, seq("!set-language:", /[a-z]+/)),
 		comment_tag: ($) =>
-			seq(choice('{#', '{#-'), choice($.set_language_directive, /[^#]+/), choice('#}', '-#}')),
+			seq(choice('{#', '{#-'), /[^#]+/, choice('#}', '-#}')),
 
 		// Expression
 		expression_tag: ($) =>
