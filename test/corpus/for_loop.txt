@@ -13,9 +13,11 @@ For statements
 ---
 
 (source_file
+  (content)
   (for_statement
     left: (identifier)
     right: (identifier)
+    body: (content)
     body: (if_statement
       condition: (binary_expression
         left: (binary_expression
@@ -32,4 +34,6 @@ For statements
         consequence: (content)
         consequence: (expression_tag
           (identifier))
-        consequence: (content)))))
+        consequence: (content)))
+    body: (content))
+  (content))

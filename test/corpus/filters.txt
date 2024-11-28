@@ -9,6 +9,7 @@ Filter expressions
 ---
 
 (source_file
+  (content)
   (expression_tag
     (filter_expression
       value: (filter_expression
@@ -22,6 +23,7 @@ Filter expressions
             name: (identifier)
             value: (string))))
       filter: (identifier)))
+  (content)
   (expression_tag
     (filter_expression
       value: (filter_expression
@@ -38,4 +40,5 @@ Filter expressions
       arguments: (argument_list
         (keyword_argument
           name: (identifier)
-          value: (string))))))
+          value: (string)))))
+  (content))

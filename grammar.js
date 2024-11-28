@@ -4,10 +4,14 @@
 module.exports = grammar({
 	name: 'tera',
 
-	externals: $ => [$.content],
+	externals: $ => [
+		$.frontmatter_delimiter,
+		$.content
+	],
 
 	rules: {
-		source_file: ($) => repeat($._template),
+		source_file: ($) => seq(optional($.frontmatter), repeat($._template)),
+		frontmatter: ($) => seq($.frontmatter_delimiter, repeat($._template), $.frontmatter_delimiter),
 
 		/* Primitives */
 		bool: ($) => token(/[Tt]rue|[Ff]alse/),

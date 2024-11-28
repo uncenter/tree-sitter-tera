@@ -1027,6 +1027,81 @@
     }
   },
   {
+    "type": "frontmatter",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block_statement",
+          "named": true
+        },
+        {
+          "type": "comment_tag",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "expression_tag",
+          "named": true
+        },
+        {
+          "type": "extends_statement",
+          "named": true
+        },
+        {
+          "type": "filter_statement",
+          "named": true
+        },
+        {
+          "type": "for_break_statement",
+          "named": true
+        },
+        {
+          "type": "for_continue_statement",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "frontmatter_delimiter",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "import_statement",
+          "named": true
+        },
+        {
+          "type": "include_statement",
+          "named": true
+        },
+        {
+          "type": "macro_statement",
+          "named": true
+        },
+        {
+          "type": "raw_statement",
+          "named": true
+        },
+        {
+          "type": "set_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "if_statement",
     "named": true,
     "fields": {
@@ -1723,6 +1798,10 @@
           "named": true
         },
         {
+          "type": "frontmatter",
+          "named": true
+        },
+        {
           "type": "if_statement",
           "named": true
         },
@@ -2112,6 +2191,10 @@
   {
     "type": "for",
     "named": false
+  },
+  {
+    "type": "frontmatter_delimiter",
+    "named": true
   },
   {
     "type": "identifier",
