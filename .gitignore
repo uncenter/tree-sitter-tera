@@ -38,3 +38,6 @@ dist/
 *.tar.gz
 *.tgz
 *.zip
+
+# Local tree-sitter binary
+tree-sitter
