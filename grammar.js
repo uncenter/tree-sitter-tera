@@ -4,14 +4,16 @@
 module.exports = grammar({
 	name: 'tera',
 
-	externals: $ => [
-		$.frontmatter_delimiter,
-		$.content
-	],
+	externals: ($) => [$.frontmatter_delimiter, $.content],
 
 	rules: {
 		source_file: ($) => seq(optional($.frontmatter), repeat($._template)),
-		frontmatter: ($) => seq($.frontmatter_delimiter, repeat($._template), $.frontmatter_delimiter),
+		frontmatter: ($) =>
+			seq(
+				$.frontmatter_delimiter,
+				repeat($._template),
+				$.frontmatter_delimiter,
+			),
 
 		/* Primitives */
 		bool: ($) => token(/[Tt]rue|[Ff]alse/),
@@ -27,12 +29,28 @@ module.exports = grammar({
 		identifier: ($) => /\w+/,
 
 		/* Expressions */
-		member_expression: ($) => prec.left(
-			seq(
-				field('value', choice($.parenthesized_expression, $.member_expression, $.identifier, $.array, $.call_expression)),
-				repeat1(choice(seq('.', field('property', $.identifier)), seq('[', field('index', $._value), ']'))),
-			)),
-		parenthesized_expression: $ => seq('(', $._value, ')'),
+		member_expression: ($) =>
+			prec.left(
+				seq(
+					field(
+						'value',
+						choice(
+							$.parenthesized_expression,
+							$.member_expression,
+							$.identifier,
+							$.array,
+							$.call_expression,
+						),
+					),
+					repeat1(
+						choice(
+							seq('.', field('property', $.identifier)),
+							seq('[', field('index', $._value), ']'),
+						),
+					),
+				),
+			),
+		parenthesized_expression: ($) => seq('(', $._value, ')'),
 		binary_expression: ($) => {
 			const exp = (op) =>
 				seq(
@@ -43,20 +61,21 @@ module.exports = grammar({
 			return choice(
 				...['*', '/', '%'].map((op) => prec.left(2, exp(op))),
 				...['+', '-', '~'].map((op) => prec.left(1, exp(op))),
-				...[
-					'==',
-					'!=',
-					'<',
-					'>',
-					'<=',
-					'>=',
-					'in',
-					'and',
-					'or'
-				].map((op) => prec.left(exp(op))),
+				...['==', '!=', '<', '>', '<=', '>=', 'in', 'and', 'or'].map(
+					(op) => prec.left(exp(op)),
+				),
 			);
 		},
-		filter_expression: $ => prec.left(2, seq(field('value', $._value), field('operator', '|'), field('filter', seq($.identifier)), optional(field('arguments', $.argument_list)))),
+		filter_expression: ($) =>
+			prec.left(
+				2,
+				seq(
+					field('value', $._value),
+					field('operator', '|'),
+					field('filter', seq($.identifier)),
+					optional(field('arguments', $.argument_list)),
+				),
+			),
 		unary_expression: ($) =>
 			prec(3, choice(seq('-', $._value), seq('not', $._value))),
 		assignment_expression: ($) =>
@@ -67,7 +86,7 @@ module.exports = grammar({
 			),
 		keyword_argument: ($) =>
 			seq(field('name', $.identifier), '=', field('value', $._value)),
-		argument_list: $ => seq('(', commaSep($.keyword_argument), ')'),
+		argument_list: ($) => seq('(', commaSep($.keyword_argument), ')'),
 		call_expression: ($) =>
 			seq(
 				/* Optionally a function name can be preceded by a scope/namespace; from importing, or `self` for custom macros in the current file. Global funtions can exist without a scope. */
@@ -75,22 +94,29 @@ module.exports = grammar({
 				field('name', $.identifier),
 				field('arguments', $.argument_list),
 			),
-		test_expression: $ => seq(field('value', $._value), 'is', optional('not'), field('test', $.identifier), optional(field('argument', seq('(', $._value, ')')))),
+		test_expression: ($) =>
+			seq(
+				field('value', $._value),
+				'is',
+				optional('not'),
+				field('test', $.identifier),
+				optional(field('argument', seq('(', $._value, ')'))),
+			),
 
 		// Something that can resolve to a value.
 		_value: ($) =>
-				choice(
-					$.identifier,
-					$.member_expression,
-					$.parenthesized_expression,
+			choice(
+				$.identifier,
+				$.member_expression,
+				$.parenthesized_expression,
 
-					$._literal,
-					$.array,
-					$.binary_expression,
-					$.unary_expression,
-					$.call_expression,
-					$.filter_expression,
-				),
+				$._literal,
+				$.array,
+				$.binary_expression,
+				$.unary_expression,
+				$.call_expression,
+				$.filter_expression,
+			),
 
 		/* Tags */
 		_template: ($) =>
@@ -123,12 +149,17 @@ module.exports = grammar({
 				$.macro_statement,
 				$.filter_statement,
 				$.block_statement,
-				$.raw_statement
+				$.raw_statement,
 			),
 
 		if_statement: ($) =>
 			seq(
-				statement(field('condition', seq('if', choice($._value, $.test_expression)))),
+				statement(
+					field(
+						'condition',
+						seq('if', choice($._value, $.test_expression)),
+					),
+				),
 				field('consequence', repeat($._template)),
 				optional(field('alternative', repeat($.elif_clause))),
 				optional(field('alternative', $.else_clause)),
@@ -138,7 +169,12 @@ module.exports = grammar({
 			prec.right(
 				1,
 				seq(
-					statement(field('condition', seq('elif', choice($._value, $.test_expression)))),
+					statement(
+						field(
+							'condition',
+							seq('elif', choice($._value, $.test_expression)),
+						),
+					),
 					field('consequence', repeat($._template)),
 				),
 			),
@@ -188,11 +224,7 @@ module.exports = grammar({
 			),
 		extends_statement: ($) => statement(seq('extends', $.string)),
 		optional_parameter: ($) =>
-			seq(
-				field('name', $.identifier),
-				'=',
-				field('value', $._literal),
-			),
+			seq(field('name', $.identifier), '=', field('value', $._literal)),
 		parameter_list: ($) =>
 			seq(
 				'(',
