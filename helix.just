@@ -1,5 +1,5 @@
 _default:
-  @just --list
+  @just --list helix
 
 queries_target := "~/.config/helix/runtime/queries/tera/"
 queries_src := justfile_directory() / "helix-queries/"
