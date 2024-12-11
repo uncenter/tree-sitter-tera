@@ -170,7 +170,7 @@
 (bool) @constant.builtin
 (string) @string
 (member_expression
-  property: (identifier)? @property)
+  property: (identifier)? @variable.other.member)
 ((identifier) @variable.builtin
   (#any-of? @variable.builtin
     "loop"
