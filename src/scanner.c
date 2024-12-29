@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <wchar.h>
+#include <wctype.h>
 
 enum TokenType {
 	FRONTMATTER_DELIMITER,
