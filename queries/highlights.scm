@@ -1,5 +1,3 @@
-; Syntax highlighting scopes for Helix: https://docs.helix-editor.com/themes.html.
-
 ; Variables
 ;----------
 
@@ -120,6 +118,7 @@
 ] @keyword
 
 ; Functions
+;-----------
 
 (macro_statement
   name: (identifier) @function
@@ -220,6 +219,7 @@
     "default"))
 
 ; Namespaces
+;-----------
 
 (import_statement
   scope: (identifier) @namespace)
