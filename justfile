@@ -1,7 +1,7 @@
 mod helix
 
 _default:
-  @just --list-submodules
+  @just --summary
 
 play:
   tree-sitter generate
