@@ -18,6 +18,9 @@ _Neovim with tree-sitter-tera. Screenshot taken with the [catppuccin/nvim](https
 
 ### Helix
 
+> [!NOTE]
+> As of 2025-02-02, tree-sitter-tera is included for Tera language support in Helix (unreleased).
+
 1. Add the following language and grammar configuration to your own [`languages.toml` configuration file](https://docs.helix-editor.com/configuration.html):
 
 ```toml
