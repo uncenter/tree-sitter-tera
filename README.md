@@ -120,7 +120,7 @@ in
 
 ##### Neovim (stable)
 
-Paste this into your [init.lua]() file:
+Add the following to your Neovim configuration (e.g. `init.lua` file or similar).
 
 ```lua
 vim.filetype.add({ extension = { tera = "tera" } })
