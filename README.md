@@ -129,35 +129,21 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.bo[event.buf].commentstring = "{# %s #}"
 	end,
 })
+```
 
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+Then, run the following command:
 
-parser_config.tera = {
-  install_info = {
-    url = "https://github.com/uncenter/tree-sitter-tera",
-    files = { "src/parser.c", "src/scanner.c" },
-    branch = "main",
-  },
-  filetype = "tera",
-}
+```
+:TSInstall tera
 ```
 
 ##### Neovim Nightly:
 
-```lua
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+Run the following command:
 
-parser_config.tera = {
-  install_info = {
-    url = "https://github.com/uncenter/tree-sitter-tera",
-    files = { "src/parser.c", "src/scanner.c" },
-    branch = "main",
-  },
-  filetype = "tera",
-}
 ```
-
-Run `:TSInstall tera` in Neovim to install the above parser.
+:TSInstall tera
+```
 
 ## License
 
