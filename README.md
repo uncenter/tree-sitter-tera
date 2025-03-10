@@ -116,26 +116,33 @@ in
 }
 ```
 
-#### Lazy.nvim
+#### [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
-Extend your nvim-treesitter plugin with this Tera plugin.
+##### Neovim stable:
 
 ```lua
-{
-    "nvim-treesitter/nvim-treesitter",
-    config = function()
-        -- setup treesitter with config
-    end,
-    dependencies = {
-        ...
-        { "uncenter/tree-sitter-tera", build = ":TSUpdate tera" },
-        ...
-    },
-    build = ":TSUpdate",
-},
+vim.filetype.add({ extension = { tera = "tera" } })
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "tera",
+	callback = function(event)
+		vim.bo[event.buf].commentstring = "{# %s #}"
+	end,
+})
+
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+parser_config.tera = {
+  install_info = {
+    url = "https://github.com/uncenter/tree-sitter-tera",
+    files = { "src/parser.c", "src/scanner.c" },
+    branch = "main",
+  },
+  filetype = "tera",
+}
 ```
 
-#### Manual
+##### Neovim Nightly:
 
 ```lua
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -143,7 +150,7 @@ local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.tera = {
   install_info = {
     url = "https://github.com/uncenter/tree-sitter-tera",
-    files = { "src/parser.c" },
+    files = { "src/parser.c", "src/scanner.c" },
     branch = "main",
   },
   filetype = "tera",
