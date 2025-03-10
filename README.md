@@ -118,7 +118,7 @@ in
 
 #### [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
-##### Neovim (stable):
+##### Neovim (stable)
 
 Paste this into your [init.lua]() file:
 
@@ -139,7 +139,7 @@ Then, run the following command:
 :TSInstall tera
 ```
 
-##### Neovim (nightly):
+##### Neovim (nightly)
 
 Run the following command:
 
