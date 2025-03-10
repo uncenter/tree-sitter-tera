@@ -1,5 +1,3 @@
-mod helix
-
 _default:
   @just --summary
 
