@@ -155,9 +155,9 @@ module.exports = grammar({
 		if_statement: ($) =>
 			seq(
 				statement(
-					field(
-						'condition',
-						seq('if', choice($._value, $.test_expression)),
+					seq(
+						'if',
+						field('condition', choice($._value, $.test_expression)),
 					),
 				),
 				field('consequence', repeat($._template)),

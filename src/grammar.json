@@ -1332,16 +1332,16 @@
               ]
             },
             {
-              "type": "FIELD",
-              "name": "condition",
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "if"
-                  },
-                  {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "if"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "condition",
+                  "content": {
                     "type": "CHOICE",
                     "members": [
                       {
@@ -1354,8 +1354,8 @@
                       }
                     ]
                   }
-                ]
-              }
+                }
+              ]
             },
             {
               "type": "CHOICE",
