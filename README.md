@@ -2,25 +2,34 @@
 
 [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammar and syntax highlight queries for the [Tera](https://keats.github.io/tera/) templating language.
 
-<!-- prettier-ignore -->
 > [!TIP]
-> _This repository provides support for Helix and Neovim. For Visual Studio Code support, see [uncenter/vscode-tera](https://github.com/uncenter/vscode-tera). For Zed support, see [uncenter/zed-tera](https://github.com/uncenter/zed-tera)._
-
-[![Screenshot of highlighted sample Tera code in Helix with the tree-sitter-tera grammar installed](./assets/helix.png)](./assets/helix.png)
-
-_Helix with tree-sitter-tera. Screenshot taken with the [catppuccin/helix](https://github.com/catppuccin/helix) theme._
-
-[![Screenshot of highlighted sample Tera code in Neovim with the tree-sitter-tera grammar installed](./assets/neovim.png)](./assets/neovim.png)
-
-_Neovim with tree-sitter-tera. Screenshot taken with the [catppuccin/nvim](https://github.com/catppuccin/nvim) theme._
+> For Visual Studio Code support, see [uncenter/vscode-tera](https://github.com/uncenter/vscode-tera). For Zed support, see [uncenter/zed-tera](https://github.com/uncenter/zed-tera).
 
 ## Usage
 
-### Helix
-
-As of v<next-released-version>, tree-sitter-tera is included by default for Tera language support in Helix!
-
 ### Neovim
+
+1. Add the following Lua code to your Neovim configuration (e.g. `init.lua` file or similar) to set up the Tera filetype.
+
+> [!NOTE]
+> This step is not required for users of the nightly Neovim distributions, as the Tera filetype has already been upstreamed ([vim/vim#16806](https://github.com/vim/vim/pull/16806), [neovim/neovim#32760](https://github.com/neovim/neovim/pull/32760)).
+
+```lua
+vim.filetype.add({ extension = { tera = "tera" } })
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "tera",
+	callback = function(event)
+		vim.bo[event.buf].commentstring = "{# %s #}"
+	end,
+})
+```
+
+2. Install the grammar by running the following command inside Neovim:
+
+```
+:TSInstall tera
+```
 
 #### nixvim
 
@@ -76,41 +85,9 @@ in
 }
 ```
 
-#### Lazy.nvim
+### Helix
 
-Extend your nvim-treesitter plugin with this Tera plugin.
-
-```lua
-{
-    "nvim-treesitter/nvim-treesitter",
-    config = function()
-        -- setup treesitter with config
-    end,
-    dependencies = {
-        ...
-        { "uncenter/tree-sitter-tera", build = ":TSUpdate tera" },
-        ...
-    },
-    build = ":TSUpdate",
-},
-```
-
-#### Manual
-
-```lua
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-
-parser_config.tera = {
-  install_info = {
-    url = "https://github.com/uncenter/tree-sitter-tera",
-    files = { "src/parser.c" },
-    branch = "main",
-  },
-  filetype = "tera",
-}
-```
-
-Run `:TSInstall tera` in Neovim to install the above parser.
+As of v<next-released-version>, tree-sitter-tera is included by default for Tera language support in Helix!
 
 ## License
 

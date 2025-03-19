@@ -1120,7 +1120,7 @@
         ]
       },
       "condition": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
@@ -1146,10 +1146,6 @@
           {
             "type": "identifier",
             "named": true
-          },
-          {
-            "type": "if",
-            "named": false
           },
           {
             "type": "member_expression",
