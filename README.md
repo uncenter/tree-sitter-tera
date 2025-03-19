@@ -87,7 +87,7 @@ in
 
 ### Helix
 
-As of v<next-released-version>, tree-sitter-tera is included by default for Tera language support in Helix!
+As of Helix v<next-released-version>, Tera language support is included out of the box.
 
 ## License
 
