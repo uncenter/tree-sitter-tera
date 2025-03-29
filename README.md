@@ -9,23 +9,7 @@
 
 ### Neovim
 
-1. Add the following Lua code to your Neovim configuration (e.g. `init.lua` file or similar) to set up the Tera filetype.
-
-> [!NOTE]
-> This step is not required for users of the nightly Neovim distributions, as the Tera filetype has already been upstreamed ([vim/vim#16806](https://github.com/vim/vim/pull/16806), [neovim/neovim#32760](https://github.com/neovim/neovim/pull/32760)).
-
-```lua
-vim.filetype.add({ extension = { tera = "tera" } })
-
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "tera",
-	callback = function(event)
-		vim.bo[event.buf].commentstring = "{# %s #}"
-	end,
-})
-```
-
-2. Install the grammar by running the following command inside Neovim:
+Install the grammar by running the following command inside Neovim:
 
 ```
 :TSInstall tera
