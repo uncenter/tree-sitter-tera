@@ -9,7 +9,7 @@
 
 ### Neovim
 
-> [!Important]
+> [!IMPORTANT]
 > Requires Neovim v0.11 or later.
 
 Install the grammar by running the following command inside Neovim:
