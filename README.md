@@ -18,60 +18,6 @@ Install the grammar by running the following command inside Neovim:
 :TSInstall tera
 ```
 
-#### nixvim
-
-```nix
-{
-  pkgs,
-  config,
-  ...
-}:
-let
-  tree-sitter-tera = pkgs.tree-sitter-grammars.tree-sitter-tera;
-in
-{
-  config.programs.nixvim = {
-    enable = true;
-
-    plugins = {
-      treesitter = {
-        enable = true;
-
-        grammarPackages = pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars ++ [
-          tree-sitter-tera
-        ];
-      };
-    };
-
-    extraConfigLua = # lua
-      ''
-        do
-          vim.filetype.add({ extension = { tera = "tera" } })
-
-          vim.api.nvim_create_autocmd("FileType", {
-            pattern = "tera",
-            callback = function(event)
-              vim.bo[event.buf].commentstring = "{# %s #}"
-            end,
-          })
-
-          require("nvim-treesitter.parsers").get_parser_configs().tera = {
-            install_info = {
-              url = "${tree-sitter-tera}",
-              files = { "src/parser.c" },
-            },
-            filetype = "tera",
-          }
-        end
-      '';
-
-    extraPlugins = [
-      tree-sitter-tera
-    ];
-  };
-}
-```
-
 ### Helix
 
 > [!NOTE]
