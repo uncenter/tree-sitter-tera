@@ -3,7 +3,7 @@
 [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammar and syntax highlight queries for the [Tera](https://keats.github.io/tera/) templating language.
 
 > [!TIP]
-> For Visual Studio Code support, see [uncenter/vscode-tera](https://github.com/uncenter/vscode-tera). For Zed support, see [uncenter/zed-tera](https://github.com/uncenter/zed-tera).
+> For Visual Studio Code support, see [uncenter/vscode-tera](https://github.com/uncenter/vscode-tera). For Zed support, see [uncenter/zed-tera](https://github.com/uncenter/zed-tera). For Sublime Text support, see [MuntasirSZN/sublime-tera](https://github.com/MuntasirSZN/sublime-tera).
 
 ## Usage
 
