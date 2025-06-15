@@ -3,7 +3,10 @@
 [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammar and syntax highlight queries for the [Tera](https://keats.github.io/tera/) templating language.
 
 > [!TIP]
-> For Visual Studio Code support, see [uncenter/vscode-tera](https://github.com/uncenter/vscode-tera). For Zed support, see [uncenter/zed-tera](https://github.com/uncenter/zed-tera). For Sublime Text support, see [MuntasirSZN/sublime-tera](https://github.com/MuntasirSZN/sublime-tera).
+> See also Tera extensions for other editors:
+> - Visual Studio Code: [uncenter/vscode-tera](https://github.com/uncenter/vscode-tera)
+> - Zed: [uncenter/zed-tera](https://github.com/uncenter/zed-tera)
+> - Sublime Text: [MuntasirSZN/sublime-tera](https://github.com/MuntasirSZN/sublime-tera)
 
 ## Usage
 
@@ -21,7 +24,7 @@ Install the grammar by running the following command inside Neovim:
 ### Helix
 
 > [!NOTE]
-> As of 2025-02-02, tree-sitter-tera is included for Tera language support in Helix (unreleased).
+> As of 2025-02-02 (unreleased), tree-sitter-tera is included for Tera language support in Helix.
 
 1. Add the following language and grammar configuration to your own [`languages.toml` configuration file](https://docs.helix-editor.com/configuration.html):
 
