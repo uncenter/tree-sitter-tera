@@ -87,7 +87,7 @@ in
 
 ### Helix
 
-As of Helix v<next-released-version>, Tera language support is included out of the box.
+As of Helix v25.07, Tera language support is included out of the box.
 
 ## License
 
