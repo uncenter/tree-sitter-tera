@@ -1,0 +1,21 @@
+==================================
+lone `{` tag start at EOF (regression, no hang)
+==================================
+
+{
+
+---
+
+(source_file
+  (content))
+
+==================================
+`-{` at EOF (regression, no hang)
+==================================
+
+-{
+
+---
+
+(source_file
+  (content))
