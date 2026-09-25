@@ -88,7 +88,12 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 
 	if (valid_symbols[CONTENT]) {
 		bool marked_end = false;
-		bool found_content = false;
+		// Count how many characters we actually consume into the content token.
+		// A tag start (`{`/`-`) that we only peek at does NOT count, so a CONTENT
+		// token is only emitted when the marked end advances past the scan start.
+		// This prevents an empty (zero-progress) CONTENT token from being returned
+		// at a tag boundary, which would otherwise loop the parser forever.
+		unsigned content_len = 0;
 
 		while (lexer->lookahead) {
 			marked_end = false;
@@ -107,7 +112,9 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 				if (dash_count == 3) {
 					break;
 				} else {
-					found_content = true;
+					// These dashes are plain content: consume them.
+					content_len += dash_count;
+					marked_end = false;
 				}
 			} else if (lexer->lookahead == '{') {
 				lexer->mark_end(lexer);
@@ -117,10 +124,12 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 				if (lexer->lookahead == '{' || lexer->lookahead == '#' || lexer->lookahead == '%') {
 					break;
 				} else {
-					found_content = true;
+					// The `{` is plain content: consume it.
+					content_len += 1;
+					marked_end = false;
 				}
 			} else {
-				found_content = true;
+				content_len += 1;
 				lexer->advance(lexer, false);
 			}
 		}
@@ -128,8 +137,10 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 			lexer->mark_end(lexer);
 		}
 
-		// We have reached the start of a Tera tag or the end of the file. We return true and the range becomes a content token.
-		if (found_content) {
+		// We have reached the start of a Tera tag or the end of the file. Only
+		// return CONTENT if we actually consumed at least one character; otherwise
+		// returning an empty token makes no progress and hangs the parser.
+		if (content_len > 0) {
 			lexer->result_symbol = CONTENT;
 			return true;
 		}
