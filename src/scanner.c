@@ -9,7 +9,8 @@
 
 enum TokenType {
 	FRONTMATTER_DELIMITER,
-	CONTENT
+	CONTENT,
+	RAW_CONTENT
 };
 
 typedef struct {
@@ -36,6 +37,58 @@ static bool scan_frontmatter_delimiter(Scanner *scanner, TSLexer *lexer) {
 			lexer->result_symbol = FRONTMATTER_DELIMITER;
 			return true;
 		}
+	}
+	return false;
+}
+
+// Consumes `{%-? endraw -?%}` if it's next. Whitespace is allowed around `endraw`.
+static bool scan_endraw_tag(TSLexer *lexer) {
+	if (lexer->lookahead != '{') { return false; }
+	lexer->advance(lexer, false);
+	if (lexer->lookahead != '%') { return false; }
+	lexer->advance(lexer, false);
+	if (lexer->lookahead == '-') { lexer->advance(lexer, false); }
+	while (iswspace(lexer->lookahead)) { lexer->advance(lexer, false); }
+
+	const char *keyword = "endraw";
+	for (int i = 0; keyword[i]; i++) {
+		if (lexer->lookahead != keyword[i]) { return false; }
+		lexer->advance(lexer, false);
+	}
+
+	while (iswspace(lexer->lookahead)) { lexer->advance(lexer, false); }
+	if (lexer->lookahead == '-') { lexer->advance(lexer, false); }
+	if (lexer->lookahead != '%') { return false; }
+	lexer->advance(lexer, false);
+	return lexer->lookahead == '}';
+}
+
+// Everything up to the next `{% endraw %}` is literal text, not template content.
+static bool scan_raw_content(TSLexer *lexer) {
+	bool has_content = false;
+
+	while (lexer->lookahead) {
+		if (lexer->lookahead == '{') {
+			lexer->mark_end(lexer);
+			if (scan_endraw_tag(lexer)) {
+				// The end is already marked before the `{`.
+				break;
+			}
+			// Not the end tag: whatever was consumed checking for it is raw text.
+			has_content = true;
+		} else {
+			lexer->advance(lexer, false);
+			has_content = true;
+		}
+	}
+	if (!lexer->lookahead) {
+		lexer->mark_end(lexer);
+	}
+
+	// As with CONTENT, never return an empty token.
+	if (has_content) {
+		lexer->result_symbol = RAW_CONTENT;
+		return true;
 	}
 	return false;
 }
@@ -84,6 +137,12 @@ bool tree_sitter_tera_external_scanner_scan(void *payload, TSLexer *lexer, const
 			scanner->ended_frontmatter = true;
 			return true;
 		}
+	}
+
+	// Inside `{% raw %}`, CONTENT isn't valid. Both are valid during error recovery,
+	// where treating the rest of the file as raw text would be wrong.
+	if (valid_symbols[RAW_CONTENT] && !valid_symbols[CONTENT]) {
+		return scan_raw_content(lexer);
 	}
 
 	if (valid_symbols[CONTENT]) {

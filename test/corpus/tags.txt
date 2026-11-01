@@ -1,0 +1,121 @@
+==================
+comments can contain # and -
+==================
+
+{# #comment# {{}} {%%} #}
+{#- a -#}
+{##}
+
+---
+
+(source_file
+  (content)
+  (comment_tag)
+  (content)
+  (comment_tag)
+  (content)
+  (comment_tag)
+  (content))
+
+==================
+raw content is not parsed
+==================
+
+{% raw %}{{ not valid {% %}{% endraw %}
+{%- raw -%}{% endrawx %}{%-   endraw   -%}
+{% raw %}{% endraw %}
+
+---
+
+(source_file
+  (content)
+  (raw_statement
+    body: (raw_content))
+  (content)
+  (raw_statement
+    body: (raw_content))
+  (content)
+  (raw_statement)
+  (content))
+
+==================
+empty if branches
+==================
+
+{% if a %}{% elif b %}{% elif c %}{% else %}{% endif %}
+
+---
+
+(source_file
+  (content)
+  (if_statement
+    condition: (identifier)
+    alternative: (elif_clause
+      condition: (identifier))
+    alternative: (elif_clause
+      condition: (identifier))
+    alternative: (else_clause))
+  (content))
+
+==================
+endblock name is optional
+==================
+
+{% block content %}{% endblock %}
+{% block content %}{% endblock content %}
+
+---
+
+(source_file
+  (content)
+  (block_statement
+    (identifier))
+  (content)
+  (block_statement
+    (identifier)
+    (identifier))
+  (content))
+
+==================
+filter sections with arguments
+==================
+
+{% filter upper %}a{% endfilter %}
+{% filter truncate(length=5) -%}b{%- endfilter %}
+
+---
+
+(source_file
+  (content)
+  (filter_statement
+    filter: (identifier)
+    (content))
+  (content)
+  (filter_statement
+    filter: (identifier)
+    arguments: (argument_list
+      (keyword_argument
+        name: (identifier)
+        value: (number)))
+    (content))
+  (content))
+
+==================
+include with ignore missing
+==================
+
+{% include "a.html"   ignore   missing %}
+{% include ["a.html", "b.html"] ignore missing %}
+
+---
+
+(source_file
+  (content)
+  (include_statement
+    (string))
+  (content)
+  (include_statement
+    (array
+      (string)
+      (string)))
+  (content))

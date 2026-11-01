@@ -176,3 +176,57 @@ filters apply to the math expression before them
         right: (identifier))
       filter: (identifier)))
   (content))
+
+==================
+tests are values
+==================
+
+{{ id is defined }}
+{{ a is not divisibleby(2) and user is defined }}
+{{ a is defined | upper }}
+{{ not user.name is starting_with("x", y) }}
+{% set x = a is defined %}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (test_expression
+      value: (identifier)
+      test: (identifier)))
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (test_expression
+        value: (identifier)
+        test: (identifier)
+        argument: (number))
+      right: (test_expression
+        value: (identifier)
+        test: (identifier))))
+  (content)
+  (expression_tag
+    (filter_expression
+      value: (test_expression
+        value: (identifier)
+        test: (identifier))
+      filter: (identifier)))
+  (content)
+  (expression_tag
+    (unary_expression
+      (test_expression
+        value: (member_expression
+          value: (identifier)
+          property: (identifier))
+        test: (identifier)
+        argument: (string)
+        argument: (identifier))))
+  (content)
+  (set_statement
+    (assignment_expression
+      left: (identifier)
+      right: (test_expression
+        value: (identifier)
+        test: (identifier))))
+  (content))

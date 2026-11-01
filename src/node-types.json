@@ -63,6 +63,10 @@
           "named": true
         },
         {
+          "type": "test_expression",
+          "named": true
+        },
+        {
           "type": "unary_expression",
           "named": true
         }
@@ -142,6 +146,10 @@
             "named": true
           },
           {
+            "type": "test_expression",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -195,6 +203,10 @@
           },
           {
             "type": "string",
+            "named": true
+          },
+          {
+            "type": "test_expression",
             "named": true
           },
           {
@@ -318,6 +330,10 @@
             "named": true
           },
           {
+            "type": "test_expression",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -435,11 +451,6 @@
         ]
       }
     }
-  },
-  {
-    "type": "comment_tag",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "elif_clause",
@@ -692,6 +703,10 @@
           "named": true
         },
         {
+          "type": "test_expression",
+          "named": true
+        },
+        {
           "type": "unary_expression",
           "named": true
         }
@@ -792,6 +807,10 @@
             "named": true
           },
           {
+            "type": "test_expression",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -802,10 +821,31 @@
   {
     "type": "filter_statement",
     "named": true,
-    "fields": {},
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "argument_list",
+            "named": true
+          }
+        ]
+      },
+      "filter": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "block_statement",
@@ -841,10 +881,6 @@
         },
         {
           "type": "for_statement",
-          "named": true
-        },
-        {
-          "type": "identifier",
           "named": true
         },
         {
@@ -1020,6 +1056,10 @@
           },
           {
             "type": "string",
+            "named": true
+          },
+          {
+            "type": "test_expression",
             "named": true
           },
           {
@@ -1349,6 +1389,10 @@
             "named": true
           },
           {
+            "type": "test_expression",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -1507,6 +1551,10 @@
             "named": true
           },
           {
+            "type": "test_expression",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -1659,6 +1707,10 @@
           "named": true
         },
         {
+          "type": "test_expression",
+          "named": true
+        },
+        {
           "type": "unary_expression",
           "named": true
         }
@@ -1670,67 +1722,11 @@
     "named": true,
     "fields": {
       "body": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "block_statement",
-            "named": true
-          },
-          {
-            "type": "comment_tag",
-            "named": true
-          },
-          {
-            "type": "content",
-            "named": true
-          },
-          {
-            "type": "expression_tag",
-            "named": true
-          },
-          {
-            "type": "extends_statement",
-            "named": true
-          },
-          {
-            "type": "filter_statement",
-            "named": true
-          },
-          {
-            "type": "for_break_statement",
-            "named": true
-          },
-          {
-            "type": "for_continue_statement",
-            "named": true
-          },
-          {
-            "type": "for_statement",
-            "named": true
-          },
-          {
-            "type": "if_statement",
-            "named": true
-          },
-          {
-            "type": "import_statement",
-            "named": true
-          },
-          {
-            "type": "include_statement",
-            "named": true
-          },
-          {
-            "type": "macro_statement",
-            "named": true
-          },
-          {
-            "type": "raw_statement",
-            "named": true
-          },
-          {
-            "type": "set_statement",
+            "type": "raw_content",
             "named": true
           }
         ]
@@ -1842,14 +1838,6 @@
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
             "type": "array",
             "named": true
           },
@@ -1887,6 +1875,10 @@
           },
           {
             "type": "string",
+            "named": true
+          },
+          {
+            "type": "test_expression",
             "named": true
           },
           {
@@ -1910,47 +1902,11 @@
         "required": true,
         "types": [
           {
-            "type": "array",
-            "named": true
-          },
-          {
-            "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "bool",
-            "named": true
-          },
-          {
-            "type": "call_expression",
-            "named": true
-          },
-          {
-            "type": "filter_expression",
-            "named": true
-          },
-          {
             "type": "identifier",
             "named": true
           },
           {
             "type": "member_expression",
-            "named": true
-          },
-          {
-            "type": "number",
-            "named": true
-          },
-          {
-            "type": "parenthesized_expression",
-            "named": true
-          },
-          {
-            "type": "string",
-            "named": true
-          },
-          {
-            "type": "unary_expression",
             "named": true
           }
         ]
@@ -2006,6 +1962,10 @@
           "named": true
         },
         {
+          "type": "test_expression",
+          "named": true
+        },
+        {
           "type": "unary_expression",
           "named": true
         }
@@ -2018,10 +1978,6 @@
   },
   {
     "type": "\"",
-    "named": false
-  },
-  {
-    "type": "#}",
     "named": false
   },
   {
@@ -2058,10 +2014,6 @@
   },
   {
     "type": "-",
-    "named": false
-  },
-  {
-    "type": "-#}",
     "named": false
   },
   {
@@ -2141,6 +2093,10 @@
     "named": false
   },
   {
+    "type": "comment_tag",
+    "named": true
+  },
+  {
     "type": "content",
     "named": true
   },
@@ -2205,7 +2161,7 @@
     "named": false
   },
   {
-    "type": "ignore missing",
+    "type": "ignore",
     "named": false
   },
   {
@@ -2229,6 +2185,10 @@
     "named": false
   },
   {
+    "type": "missing",
+    "named": false
+  },
+  {
     "type": "not",
     "named": false
   },
@@ -2245,19 +2205,15 @@
     "named": false
   },
   {
+    "type": "raw_content",
+    "named": true
+  },
+  {
     "type": "set",
     "named": false
   },
   {
     "type": "set_global",
-    "named": false
-  },
-  {
-    "type": "{#",
-    "named": false
-  },
-  {
-    "type": "{#-",
     "named": false
   },
   {

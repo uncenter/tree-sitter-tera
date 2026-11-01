@@ -16,7 +16,11 @@ const PREC = {
 export default grammar({
 	name: 'tera',
 
-	externals: ($) => [$.frontmatter_delimiter, $.content],
+	externals: ($) => [$.frontmatter_delimiter, $.content, $.raw_content],
+
+	// Following a branch's `%}`, `{%` either starts a nested tag or the next branch
+	// (`{% elif %}`, `{% else %}`, `{% endif %}`), only the keyword itself can distinguish.
+	conflicts: ($) => [[$.elif_clause], [$.else_clause]],
 
 	rules: {
 		source_file: ($) => seq(optional($.frontmatter), repeat($._template)),
@@ -120,11 +124,18 @@ export default grammar({
 			),
 		test_expression: ($) =>
 			seq(
-				field('value', $._value),
+				field('value', choice($.identifier, $.member_expression)),
 				'is',
 				optional('not'),
 				field('test', $.identifier),
-				optional(field('argument', seq('(', $._value, ')'))),
+				optional(
+					seq(
+						'(',
+						field('argument', $._value),
+						repeat(seq(',', field('argument', $._value))),
+						')',
+					),
+				),
 			),
 
 		// Something that can resolve to a value.
@@ -140,6 +151,7 @@ export default grammar({
 				$.unary_expression,
 				$.call_expression,
 				$.filter_expression,
+				$.test_expression,
 			),
 
 		/* Tags */
@@ -152,8 +164,7 @@ export default grammar({
 			),
 
 		// Comment
-		comment_tag: ($) =>
-			seq(choice('{#', '{#-'), /[^#]+/, choice('#}', '-#}')),
+		comment_tag: (_) => token(seq('{#', /[^#]*#+([^#}][^#]*#+)*/, '}')),
 
 		// Expression
 		expression_tag: ($) =>
@@ -179,10 +190,7 @@ export default grammar({
 		if_statement: ($) =>
 			seq(
 				statement(
-					seq(
-						'if',
-						field('condition', choice($._value, $.test_expression)),
-					),
+					seq('if', field('condition', $._value)),
 				),
 				field('consequence', repeat($._template)),
 				optional(field('alternative', repeat($.elif_clause))),
@@ -190,25 +198,14 @@ export default grammar({
 				statement('endif'),
 			),
 		elif_clause: ($) =>
-			prec.right(
-				1,
-				seq(
-					statement(
-						field(
-							'condition',
-							seq('elif', choice($._value, $.test_expression)),
-						),
-					),
-					field('consequence', repeat($._template)),
-				),
+			seq(
+				statement(field('condition', seq('elif', $._value))),
+				field('consequence', repeat($._template)),
 			),
 		else_clause: ($) =>
-			prec.right(
-				1,
-				seq(
-					statement('else'),
-					field('consequence', repeat($._template)),
-				),
+			seq(
+				statement('else'),
+				field('consequence', repeat($._template)),
 			),
 		for_statement: ($) =>
 			seq(
@@ -239,7 +236,7 @@ export default grammar({
 				seq(
 					'include',
 					choice($.string, $.array),
-					optional('ignore missing'),
+					optional(seq('ignore', 'missing')),
 				),
 			),
 		import_statement: ($) =>
@@ -274,7 +271,13 @@ export default grammar({
 			),
 		filter_statement: ($) =>
 			seq(
-				statement(seq('filter', $.identifier)),
+				statement(
+					seq(
+						'filter',
+						field('filter', $.identifier),
+						optional(field('arguments', $.argument_list)),
+					),
+				),
 				repeat($._template),
 				statement('endfilter'),
 			),
@@ -282,12 +285,12 @@ export default grammar({
 			seq(
 				statement(seq('block', $.identifier)),
 				repeat($._template),
-				statement(seq('endblock', $.identifier)),
+				statement(seq('endblock', optional($.identifier))),
 			),
 		raw_statement: ($) =>
 			seq(
 				statement('raw'),
-				field('body', repeat($._template)),
+				optional(field('body', $.raw_content)),
 				statement('endraw'),
 			),
 	},
