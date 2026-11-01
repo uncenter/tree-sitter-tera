@@ -1,0 +1,174 @@
+==================
+literals
+==================
+
+{{ none }}{{ None }}{{ null }}
+{{ "a\"b\\c" }}
+{{ 'it\'s' }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (none))
+  (expression_tag
+    (none))
+  (expression_tag
+    (none))
+  (content)
+  (expression_tag
+    (string
+      (escape_sequence)
+      (escape_sequence)))
+  (content)
+  (expression_tag
+    (string
+      (escape_sequence)))
+  (content))
+
+==================
+maps and spread
+==================
+
+{% set m = {"a": 1, 2: true, "b": [1, 2],} %}
+{{ {...base, "d": 4} }}
+{{ [0, ...numbers, 99] }}
+
+---
+
+(source_file
+  (content)
+  (set_statement
+    (assignment_expression
+      left: (identifier)
+      right: (map
+        (pair
+          key: (string)
+          value: (number))
+        (pair
+          key: (number)
+          value: (bool))
+        (pair
+          key: (string)
+          value: (array
+            (number)
+            (number))))))
+  (content)
+  (expression_tag
+    (map
+      (spread_element
+        (identifier))
+      (pair
+        key: (string)
+        value: (number))))
+  (content)
+  (expression_tag
+    (array
+      (number)
+      (spread_element
+        (identifier))
+      (number)))
+  (content))
+
+==================
+list comprehensions
+==================
+
+{{ [n * 2 for n in numbers] }}
+{{ [k ~ v for k, v in items if v > 1] | join(sep=",") }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (list_comprehension
+      body: (binary_expression
+        left: (identifier)
+        right: (number))
+      left: (identifier)
+      right: (identifier)))
+  (content)
+  (expression_tag
+    (filter_expression
+      value: (list_comprehension
+        body: (binary_expression
+          left: (identifier)
+          right: (identifier))
+        left: (identifier)
+        left: (identifier)
+        right: (identifier)
+        condition: (binary_expression
+          left: (identifier)
+          right: (number)))
+      filter: (identifier)
+      arguments: (argument_list
+        (keyword_argument
+          name: (identifier)
+          value: (string)))))
+  (content))
+
+==================
+member access, subscripts and slices
+==================
+
+{{ a.b[0].c }}
+{{ a?.b?['c'] }}
+{{ a[-1] }}
+{{ a[1:] }}
+{{ a[:-1] }}
+{{ a[0:2:2] }}
+{{ a[::-1] }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (member_expression
+      value: (subscript_expression
+        value: (member_expression
+          value: (identifier)
+          property: (identifier))
+        index: (number))
+      property: (identifier)))
+  (content)
+  (expression_tag
+    (subscript_expression
+      value: (member_expression
+        value: (identifier)
+        property: (identifier))
+      index: (string)))
+  (content)
+  (expression_tag
+    (subscript_expression
+      value: (identifier)
+      index: (number)))
+  (content)
+  (expression_tag
+    (subscript_expression
+      value: (identifier)
+      index: (slice
+        start: (number))))
+  (content)
+  (expression_tag
+    (subscript_expression
+      value: (identifier)
+      index: (slice
+        stop: (number))))
+  (content)
+  (expression_tag
+    (subscript_expression
+      value: (identifier)
+      index: (slice
+        start: (number)
+        stop: (number)
+        step: (number))))
+  (content)
+  (expression_tag
+    (subscript_expression
+      value: (identifier)
+      index: (slice
+        step: (number))))
+  (content))

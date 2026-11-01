@@ -144,23 +144,24 @@ multiplication binds tighter than addition
   (content))
 
 ==================
-filters apply to the math expression before them
+filters bind tighter than math
 ==================
 
 {{ 1 + a | length }}
 {{ a | length + 1 }}
 {{ 'a' ~ b | upper }}
+{{ -a | abs }}
 
 ---
 
 (source_file
   (content)
   (expression_tag
-    (filter_expression
-      value: (binary_expression
-        left: (number)
-        right: (identifier))
-      filter: (identifier)))
+    (binary_expression
+      left: (number)
+      right: (filter_expression
+        value: (identifier)
+        filter: (identifier))))
   (content)
   (expression_tag
     (binary_expression
@@ -170,10 +171,16 @@ filters apply to the math expression before them
       right: (number)))
   (content)
   (expression_tag
+    (binary_expression
+      left: (string)
+      right: (filter_expression
+        value: (identifier)
+        filter: (identifier))))
+  (content)
+  (expression_tag
     (filter_expression
-      value: (binary_expression
-        left: (string)
-        right: (identifier))
+      value: (unary_expression
+        (identifier))
       filter: (identifier)))
   (content))
 
@@ -182,9 +189,11 @@ tests are values
 ==================
 
 {{ id is defined }}
-{{ a is not divisibleby(2) and user is defined }}
+{{ a is not divisible_by(value=2) and user is defined }}
 {{ a is defined | upper }}
-{{ not user.name is starting_with("x", y) }}
+{{ not user.name is starting_with(pat="x") }}
+{{ a + 1 is odd }}
+{{ a is divisibleby(2) }}
 {% set x = a is defined %}
 
 ---
@@ -201,7 +210,10 @@ tests are values
       left: (test_expression
         value: (identifier)
         test: (identifier)
-        argument: (number))
+        arguments: (argument_list
+          (keyword_argument
+            name: (identifier)
+            value: (number))))
       right: (test_expression
         value: (identifier)
         test: (identifier))))
@@ -220,8 +232,24 @@ tests are values
           value: (identifier)
           property: (identifier))
         test: (identifier)
-        argument: (string)
-        argument: (identifier))))
+        arguments: (argument_list
+          (keyword_argument
+            name: (identifier)
+            value: (string))))))
+  (content)
+  (expression_tag
+    (test_expression
+      value: (binary_expression
+        left: (identifier)
+        right: (number))
+      test: (identifier)))
+  (content)
+  (expression_tag
+    (test_expression
+      value: (identifier)
+      test: (identifier)
+      arguments: (argument_list
+        (number))))
   (content)
   (set_statement
     (assignment_expression
@@ -229,4 +257,111 @@ tests are values
       right: (test_expression
         value: (identifier)
         test: (identifier))))
+  (content))
+
+==================
+power and floor division
+==================
+
+{{ 2 ** 3 ** 2 }}
+{{ 2 * 3 ** 2 }}
+{{ 7 // 2 * 3 }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (number)
+      right: (binary_expression
+        left: (number)
+        right: (number))))
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (number)
+      right: (binary_expression
+        left: (number)
+        right: (number))))
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (binary_expression
+        left: (number)
+        right: (number))
+      right: (number)))
+  (content))
+
+==================
+in and is bind looser than comparisons
+==================
+
+{{ 1 == 1 in b }}
+{{ true and 2 is odd }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (binary_expression
+        left: (number)
+        right: (number))
+      right: (identifier)))
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (bool)
+      right: (test_expression
+        value: (number)
+        test: (identifier))))
+  (content))
+
+==================
+ternaries bind loosest
+==================
+
+{{ 1 if x else 2 + 3 }}
+{{ 'a' if x else 'b' | upper }}
+{{ x or y if x else z }}
+{{ a if b else c if d else e }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (ternary_expression
+      consequence: (number)
+      condition: (identifier)
+      alternative: (binary_expression
+        left: (number)
+        right: (number))))
+  (content)
+  (expression_tag
+    (ternary_expression
+      consequence: (string)
+      condition: (identifier)
+      alternative: (filter_expression
+        value: (string)
+        filter: (identifier))))
+  (content)
+  (expression_tag
+    (ternary_expression
+      consequence: (binary_expression
+        left: (identifier)
+        right: (identifier))
+      condition: (identifier)
+      alternative: (identifier)))
+  (content)
+  (expression_tag
+    (ternary_expression
+      consequence: (identifier)
+      condition: (identifier)
+      alternative: (ternary_expression
+        consequence: (identifier)
+        condition: (identifier)
+        alternative: (identifier))))
   (content))

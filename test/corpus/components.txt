@@ -1,0 +1,116 @@
+==================
+component definitions
+==================
+
+{% component ui.button(label: string, variant: string = "primary", count = -1, data: map = {}, @page, ...rest) {"description": "A button"} %}
+<button>{{ label }}</button>
+{% endcomponent ui.button %}
+
+---
+
+(source_file
+  (content)
+  (component_statement
+    name: (component_name
+      (identifier)
+      (identifier))
+    parameters: (component_parameters
+      (component_parameter
+        name: (identifier)
+        type: (identifier))
+      (component_parameter
+        name: (identifier)
+        type: (identifier)
+        default: (string))
+      (component_parameter
+        name: (identifier)
+        default: (number))
+      (component_parameter
+        name: (identifier)
+        type: (identifier)
+        default: (map))
+      (component_parameter
+        name: (identifier))
+      (component_parameter
+        name: (identifier)))
+    metadata: (map
+      (pair
+        key: (string)
+        value: (string)))
+    body: (content)
+    body: (expression_tag
+      (identifier))
+    body: (content)
+    (component_name
+      (identifier)
+      (identifier)))
+  (content))
+
+==================
+self-closing component calls
+==================
+
+{{ <ui.button label="Click" count={1 + 2} title {...attrs} /> }}
+{{<icon/>}}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (component_call
+      name: (component_name
+        (identifier)
+        (identifier))
+      (component_attribute
+        name: (identifier)
+        value: (string))
+      (component_attribute
+        name: (identifier)
+        value: (binary_expression
+          left: (number)
+          right: (number)))
+      (component_attribute
+        name: (identifier))
+      (component_attribute
+        (spread_element
+          (identifier)))))
+  (content)
+  (expression_tag
+    (component_call
+      name: (component_name
+        (identifier))))
+  (content))
+
+==================
+component calls with a body
+==================
+
+{% <ui.widget title> %}
+  {{ <ui.button label="Sign up"/> }}
+{% </ui.widget> %}
+
+---
+
+(source_file
+  (content)
+  (component_block
+    name: (component_name
+      (identifier)
+      (identifier))
+    (component_attribute
+      name: (identifier))
+    body: (content)
+    body: (expression_tag
+      (component_call
+        name: (component_name
+          (identifier)
+          (identifier))
+        (component_attribute
+          name: (identifier)
+          value: (string))))
+    body: (content)
+    (component_name
+      (identifier)
+      (identifier)))
+  (content))

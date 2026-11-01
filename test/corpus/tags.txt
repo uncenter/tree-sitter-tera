@@ -77,26 +77,40 @@ endblock name is optional
   (content))
 
 ==================
-filter sections with arguments
+filter sections
 ==================
 
 {% filter upper %}a{% endfilter %}
 {% filter truncate(length=5) -%}b{%- endfilter %}
+{% filter upper | trim(pat="x") %}c{% endfilter %}
 
 ---
 
 (source_file
   (content)
   (filter_statement
-    filter: (identifier)
+    filter: (filter_call
+      name: (identifier))
     (content))
   (content)
   (filter_statement
-    filter: (identifier)
-    arguments: (argument_list
-      (keyword_argument
-        name: (identifier)
-        value: (number)))
+    filter: (filter_call
+      name: (identifier)
+      arguments: (argument_list
+        (keyword_argument
+          name: (identifier)
+          value: (number))))
+    (content))
+  (content)
+  (filter_statement
+    filter: (filter_call
+      name: (identifier))
+    filter: (filter_call
+      name: (identifier)
+      arguments: (argument_list
+        (keyword_argument
+          name: (identifier)
+          value: (string))))
     (content))
   (content))
 
@@ -118,4 +132,32 @@ include with ignore missing
     (array
       (string)
       (string)))
+  (content))
+
+==================
+set blocks
+==================
+
+{% set hero | upper | trans(lang="fr") %}Hello{% endset %}
+{% set_global body %}text{% endset %}
+
+---
+
+(source_file
+  (content)
+  (set_block_statement
+    name: (identifier)
+    filter: (filter_call
+      name: (identifier))
+    filter: (filter_call
+      name: (identifier)
+      arguments: (argument_list
+        (keyword_argument
+          name: (identifier)
+          value: (string))))
+    body: (content))
+  (content)
+  (set_block_statement
+    name: (identifier)
+    body: (content))
   (content))
