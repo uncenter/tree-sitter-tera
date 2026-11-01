@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.3](https://github.com/uncenter/tree-sitter-tera/compare/v0.1.2...v0.1.3) (2026-11-01)
+
+
+### Bug Fixes
+
+* **grammar:** align test expressions, comment and raw tags, more with spec ([cbea730](https://github.com/uncenter/tree-sitter-tera/commit/cbea73065227663abc3c79001f7d7a8fb9a52ece))
+* **grammar:** follow upstream spec/parser precedence rules ([5f75c07](https://github.com/uncenter/tree-sitter-tera/commit/5f75c07bee9e263b1c1186268a88f13f63d7e2bc))
+* **grammar:** support `not in` operator ([5aa536d](https://github.com/uncenter/tree-sitter-tera/commit/5aa536df7645c6e8564030809b90401d984b5b5e))
+
 ## [0.1.2](https://github.com/uncenter/tree-sitter-tera/compare/v0.1.1...v0.1.2) (2026-11-01)
 
 
