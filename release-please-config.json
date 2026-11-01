@@ -60,8 +60,7 @@
 		},
 		{
 			"type": "build",
-			"section": "Build System",
-			"hidden": true
+			"section": "Build"
 		},
 		{
 			"type": "ci",
