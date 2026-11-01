@@ -2,6 +2,7 @@
 	"name": "tree-sitter-tera",
 	"version": "0.1.1",
 	"description": "Tree-sitter grammar for the Tera templating language.",
+	"type": "module",
 	"repository": "github:uncenter/tree-sitter-tera",
 	"license": "MIT",
 	"author": {
@@ -16,6 +17,7 @@
 	],
 	"files": [
 		"grammar.js",
+		"tree-sitter.json",
 		"binding.gyp",
 		"prebuilds/**",
 		"bindings/node/*",
@@ -24,16 +26,18 @@
 		"*.wasm"
 	],
 	"dependencies": {
-		"node-addon-api": "^8.1.0",
-		"node-gyp-build": "^4.8.2"
+		"node-addon-api": "^8.5.0",
+		"node-gyp-build": "^4.8.4"
 	},
 	"devDependencies": {
+		"node-gyp": "^13.1.0",
 		"prebuildify": "^6.0.1",
 		"prettier": "^3.3.3",
+		"tree-sitter": "^0.25.0",
 		"tree-sitter-cli": "0.26.11"
 	},
 	"peerDependencies": {
-		"tree-sitter": "^0.21.1"
+		"tree-sitter": "^0.25.0"
 	},
 	"peerDependenciesMeta": {
 		"tree-sitter": {
@@ -46,14 +50,5 @@
 		"start": "tree-sitter playground",
 		"test": "node --test bindings/node/*_test.js"
 	},
-	"tree-sitter": [
-		{
-			"scope": "source.tera",
-			"file-types": "tera",
-			"injection-regex": "^tera$",
-			"highlights": "queries/highlights.scm",
-			"locals": "queries/locals.scm"
-		}
-	],
 	"packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b"
 }

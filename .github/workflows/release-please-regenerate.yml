@@ -25,10 +25,8 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
-      - name: Install tree-sitter CLI
-        run: |
-          pnpm install --ignore-scripts
-          pnpm rebuild tree-sitter-cli
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Generate parser
         run: pnpm exec tree-sitter generate

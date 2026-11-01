@@ -9,7 +9,9 @@
 			"file-types": [
 				"tera"
 			],
-			"injection-regex": "^tera$"
+			"injection-regex": "^tera$",
+			"injections": "queries/injections.scm",
+			"locals": "queries/locals.scm"
 		}
 	],
 	"metadata": {
