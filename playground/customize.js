@@ -31,13 +31,19 @@ writeFileSync(
 copyFileSync(join(import.meta.dirname, 'extras.js'), join(site, 'extras.js'));
 
 const indexPath = join(site, 'index.html');
-const html = readFileSync(indexPath, 'utf8');
+let html = readFileSync(indexPath, 'utf8');
 const anchor = '<script type="module" src="playground.js"></script>';
-if (!html.includes(anchor)) {
-	throw new Error(
-		`Couldn't find ${anchor} in ${indexPath}; the exported playground may have changed.`,
-	);
+// Grammar is loaded at `${LANGUAGE_BASE_URL}/tree-sitter-parser.wasm`.
+// By default is the root path, which breaks when served from a subpath (GitHub Pages).
+const baseUrl = '<script>LANGUAGE_BASE_URL = "";</script>';
+for (const expected of [anchor, baseUrl]) {
+	if (!html.includes(expected)) {
+		throw new Error(
+			`Couldn't find ${expected} in ${indexPath}; the exported playground may have changed.`,
+		);
+	}
 }
+html = html.replace(baseUrl, '<script>LANGUAGE_BASE_URL = ".";</script>');
 const scripts = [
 	`<script src="${LZ_STRING.src}" integrity="${LZ_STRING.integrity}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`,
 	'<script src="defaults.js"></script>',
