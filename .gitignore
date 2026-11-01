@@ -41,3 +41,6 @@ dist/
 
 # Local tree-sitter binary
 tree-sitter
+
+# Exported playground
+_site/
