@@ -1,0 +1,31 @@
+==================
+in and not in operators
+==================
+
+{{ 'index' in page.path }}
+{{ an_ident not in an_obj }}
+{% if a not in [1, 2] %}{% endif %}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (string)
+      right: (member_expression
+        value: (identifier)
+        property: (identifier))))
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (identifier)
+      right: (identifier)))
+  (content)
+  (if_statement
+    condition: (binary_expression
+      left: (identifier)
+      right: (array
+        (number)
+        (number))))
+  (content))

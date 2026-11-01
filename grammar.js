@@ -61,9 +61,18 @@ export default grammar({
 			return choice(
 				...['*', '/', '%'].map((op) => prec.left(2, exp(op))),
 				...['+', '-', '~'].map((op) => prec.left(1, exp(op))),
-				...['==', '!=', '<', '>', '<=', '>=', 'in', 'and', 'or'].map(
-					(op) => prec.left(exp(op)),
-				),
+				...[
+					'==',
+					'!=',
+					'<',
+					'>',
+					'<=',
+					'>=',
+					'in',
+					seq('not', 'in'),
+					'and',
+					'or',
+				].map((op) => prec.left(exp(op))),
 			);
 		},
 		filter_expression: ($) =>

@@ -204,7 +204,7 @@
         ]
       },
       "operator": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
@@ -257,6 +257,10 @@
           },
           {
             "type": "in",
+            "named": false
+          },
+          {
+            "type": "not",
             "named": false
           },
           {
