@@ -17,23 +17,19 @@
 	"changelog-sections": [
 		{
 			"type": "feat",
-			"section": "Features",
-			"hidden": true
+			"section": "Features"
 		},
 		{
 			"type": "fix",
-			"section": "Bug Fixes",
-			"hidden": true
+			"section": "Bug Fixes"
 		},
 		{
 			"type": "perf",
-			"section": "Performance Improvements",
-			"hidden": true
+			"section": "Performance Improvements"
 		},
 		{
 			"type": "revert",
-			"section": "Reverts",
-			"hidden": true
+			"section": "Reverts"
 		},
 		{
 			"type": "docs",
