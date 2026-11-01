@@ -17,6 +17,8 @@ playground: build
 site: build
     {{ tree-sitter }} build --wasm
     rm -rf _site
-    {{ tree-sitter }} playground --export _site
-    node playground/customize.js _site
+    # export to same subpath as on deployed github pages version
+    {{ tree-sitter }} playground --export _site/tree-sitter-tera
+    node playground/customize.js _site/tree-sitter-tera
+    @echo "Playground: http://localhost:8000/tree-sitter-tera/"
     python3 -m http.server -d _site
