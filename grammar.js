@@ -1,6 +1,18 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
+// Operator precedence rules, from loosest to tightest, based on Tera's (v1) parser.
+const PREC = {
+	or: 1,
+	and: 2,
+	not: 3,
+	compare: 4,
+	filter: 5,
+	add: 6,
+	multiply: 7,
+	negate: 8,
+};
+
 export default grammar({
 	name: 'tera',
 
@@ -59,8 +71,8 @@ export default grammar({
 					field('right', $._value),
 				);
 			return choice(
-				...['*', '/', '%'].map((op) => prec.left(2, exp(op))),
-				...['+', '-', '~'].map((op) => prec.left(1, exp(op))),
+				...['*', '/', '%'].map((op) => prec.left(PREC.multiply, exp(op))),
+				...['+', '-', '~'].map((op) => prec.left(PREC.add, exp(op))),
 				...[
 					'==',
 					'!=',
@@ -70,14 +82,14 @@ export default grammar({
 					'>=',
 					'in',
 					seq('not', 'in'),
-					'and',
-					'or',
-				].map((op) => prec.left(exp(op))),
+				].map((op) => prec.left(PREC.compare, exp(op))),
+				prec.left(PREC.and, exp('and')),
+				prec.left(PREC.or, exp('or')),
 			);
 		},
 		filter_expression: ($) =>
 			prec.left(
-				2,
+				PREC.filter,
 				seq(
 					field('value', $._value),
 					field('operator', '|'),
@@ -86,7 +98,10 @@ export default grammar({
 				),
 			),
 		unary_expression: ($) =>
-			prec(3, choice(seq('-', $._value), seq('not', $._value))),
+			choice(
+				prec(PREC.negate, seq('-', $._value)),
+				prec(PREC.not, seq('not', $._value)),
+			),
 		assignment_expression: ($) =>
 			seq(
 				field('left', choice($.identifier, $.member_expression)),

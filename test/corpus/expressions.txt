@@ -29,3 +29,150 @@ in and not in operators
         (number)
         (number))))
   (content))
+
+==================
+and binds tighter than or
+==================
+
+{{ a or b and c }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (identifier)
+      right: (binary_expression
+        left: (identifier)
+        right: (identifier))))
+  (content))
+
+==================
+comparisons bind tighter than and
+==================
+
+{{ a == b and c == d }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (binary_expression
+        left: (identifier)
+        right: (identifier))
+      right: (binary_expression
+        left: (identifier)
+        right: (identifier))))
+  (content))
+
+==================
+not applies to the whole comparison
+==================
+
+{{ not a in b }}
+{{ not x == y }}
+{% if not a and b %}{% endif %}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (unary_expression
+      (binary_expression
+        left: (identifier)
+        right: (identifier))))
+  (content)
+  (expression_tag
+    (unary_expression
+      (binary_expression
+        left: (identifier)
+        right: (identifier))))
+  (content)
+  (if_statement
+    condition: (binary_expression
+      left: (unary_expression
+        (identifier))
+      right: (identifier)))
+  (content))
+
+==================
+math binds tighter than comparisons
+==================
+
+{{ x + 1 == 2 }}
+{{ x * 2 in b }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (binary_expression
+        left: (identifier)
+        right: (number))
+      right: (number)))
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (binary_expression
+        left: (identifier)
+        right: (number))
+      right: (identifier)))
+  (content))
+
+==================
+multiplication binds tighter than addition
+==================
+
+{{ 1 + 2 * 3 }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (number)
+      right: (binary_expression
+        left: (number)
+        right: (number))))
+  (content))
+
+==================
+filters apply to the math expression before them
+==================
+
+{{ 1 + a | length }}
+{{ a | length + 1 }}
+{{ 'a' ~ b | upper }}
+
+---
+
+(source_file
+  (content)
+  (expression_tag
+    (filter_expression
+      value: (binary_expression
+        left: (number)
+        right: (identifier))
+      filter: (identifier)))
+  (content)
+  (expression_tag
+    (binary_expression
+      left: (filter_expression
+        value: (identifier)
+        filter: (identifier))
+      right: (number)))
+  (content)
+  (expression_tag
+    (filter_expression
+      value: (binary_expression
+        left: (string)
+        right: (identifier))
+      filter: (identifier)))
+  (content))
