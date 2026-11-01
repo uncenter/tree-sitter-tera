@@ -1,6 +1,6 @@
 {
 	"name": "tree-sitter-tera",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Tree-sitter grammar for the Tera templating language.",
 	"repository": "github:uncenter/tree-sitter-tera",
 	"license": "MIT",
