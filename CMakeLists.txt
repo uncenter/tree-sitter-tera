@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-tera
+        # x-release-please-start-version
         VERSION "0.1.0"
+        # x-release-please-end
         DESCRIPTION "Tree-sitter grammar for the Tera templating language."
         HOMEPAGE_URL "https://github.com/uncenter/tree-sitter-tera"
         LANGUAGES C)

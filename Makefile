@@ -4,7 +4,9 @@ endif
 
 LANGUAGE_NAME := tree-sitter-tera
 HOMEPAGE_URL := https://github.com/uncenter/tree-sitter-tera
+# x-release-please-start-version
 VERSION := 0.1.0
+# x-release-please-end
 
 # repository
 SRC_DIR := src
