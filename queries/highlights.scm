@@ -18,8 +18,10 @@
 ;-----------
 
 (string) @string
+(escape_sequence) @constant.character.escape
 
 (bool) @constant.builtin
+(none) @constant.builtin
 
 (number) @constant.numeric
 
@@ -29,11 +31,14 @@
 [
   "."
   ","
+  ":"
 ] @punctuation.delimiter
 
 [
   "*"
+  "**"
   "/"
+  "//"
   "%"
   "|"
   "+"
@@ -46,13 +51,18 @@
   ">"
   "<="
   ">="
+  "?."
+  "..."
 ] @operator
 
 [
   "("
   ")"
   "["
+  "?["
   "]"
+  "{"
+  "}"
   "{%"
   "%}"
   "-%}"
@@ -106,12 +116,15 @@
 [
   "set"
   "set_global"
+  "endset"
   "filter"
   "endfilter"
   "block"
   "endblock"
   "macro"
   "endmacro"
+  "component"
+  "endcomponent"
   "raw"
   "endraw"
   "as"
@@ -141,6 +154,46 @@
     "get_random"
     "get_env"))
 
+; Components
+;-----------
+
+(component_call
+  [
+    "<"
+    "/"
+    ">"
+  ] @punctuation.bracket)
+
+(component_block
+  [
+    "<"
+    "</"
+    ">"
+  ] @punctuation.bracket)
+
+(component_call
+  name: (component_name
+    (identifier) @tag))
+
+(component_block
+  (component_name
+    (identifier) @tag))
+
+(component_statement
+  (component_name
+    (identifier) @function))
+
+(component_attribute
+  name: (identifier) @attribute)
+
+(component_parameter
+  name: (identifier) @variable.parameter)
+
+(component_parameter
+  type: (identifier) @type)
+
+"@" @punctuation.special
+
 (test_expression
   test: (identifier) @function)
 
@@ -148,12 +201,20 @@
   test: (identifier) @function.builtin
   (#any-of? @function.builtin
     ; Tests - https://keats.github.io/tera/docs/#built-in-tests
+    ; v2: https://github.com/Keats/tera/blob/master/tera/src/tera.rs
     "defined"
     "undefined"
     "odd"
     "even"
     "string"
     "number"
+    "integer"
+    "float"
+    "bool"
+    "none"
+    "array"
+    "map"
+    "divisible_by"
     "divisibleby"
     "iterable"
     "object"
@@ -165,10 +226,31 @@
 (filter_expression
   filter: (identifier) @function.method)
 
-(filter_expression
-  filter: (identifier) @function.builtin
+(filter_call
+  name: (identifier) @function.method)
+
+([
+  (filter_expression
+    filter: (identifier) @function.builtin)
+  (filter_call
+    name: (identifier) @function.builtin)
+]
   (#any-of? @function.builtin
     ; Filters - https://keats.github.io/tera/docs/#built-in-filters
+    ; v2 and tera-contrib: https://github.com/Keats/tera/blob/master/tera/src/tera.rs
+    "str"
+    "escape_html"
+    "newlines_to_br"
+    "keys"
+    "values"
+    "pairs"
+    "filesize_format"
+    "slug"
+    "format"
+    "regex_replace"
+    "b64_encode"
+    "b64_decode"
+    "shuffle"
     "lower"
     "upper"
     "wordcount"
